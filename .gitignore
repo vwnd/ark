@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Ark.Revit/.vs/Ark.Revit
+/Ark.Revit/bin/Debug/net48
+/Ark.Revit/obj
