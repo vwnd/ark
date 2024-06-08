@@ -1,27 +1,15 @@
-version: '3.8'
-
 services:
   db:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
-  minio:
-    image: minio/minio
-    restart: always
-    environment:
-      MINIO_ACCESS_KEY: your_access_key
-      MINIO_SECRET_KEY: your_secret_key
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 9000:9000
+      - '${DB_PORT}:5432'
     volumes:
-      - minio_data:/data
+      - ./postgres-data:/var/lib/postgresql
 
 volumes:
-  db_data:
-  minio_data:
+  postgres-data:
