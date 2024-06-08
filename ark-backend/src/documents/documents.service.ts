@@ -27,9 +27,7 @@ export class DocumentsService {
     private readonly drizzle: PostgresJsDatabase<typeof schema>,
   ) {}
 
-  async uploadDocument(file: Express.Multer.File) {
-    // create document in db
-
+  async uploadDocument(file: Express.Multer.File, autoSync?: boolean) {
     // file.originalname will have extension, slice the string to get it
     const extension = file.originalname.slice(
       file.originalname.lastIndexOf('.') + 1,
@@ -55,24 +53,41 @@ export class DocumentsService {
 
     let urn;
     if (extension === 'rvt') {
-      urn = await this.apsService.uploadFile(
-        `${projectId}/${document.id}`,
-        file,
-      );
+      urn = await this.uploadRevit(file, `${projectId}/${document.id}`);
     } else if (extension === '3dm') {
-      urn = await this.storageService.uploadFile(
-        file.buffer,
-        `${projectId}/${document.id}`,
-        file.mimetype,
-      );
+      urn = await this.uploadRhino(file, `${projectId}/${document.id}`);
     }
     await this.drizzle
       .update(schema.documents)
       .set({ urn })
       .where(eq(schema.documents.id, document.id));
+
+    if (autoSync) {
+      if (extension === 'rvt') {
+        this.triggerRevitJob(urn);
+      } else if (extension === '3dm') {
+        this.triggerRhinoJob(urn);
+      }
+    }
   }
 
   async findAll() {
     return this.drizzle.query.documents.findMany();
+  }
+
+  private async uploadRhino(file, key): Promise<string> {
+    return this.storageService.uploadFile(file.buffer, key, file.mimetype);
+  }
+
+  private async uploadRevit(file, key) {
+    return this.apsService.uploadFile(key, file);
+  }
+
+  private async triggerRevitJob(urn: string) {
+    return this.apsService.revitToSpeckle(urn);
+  }
+
+  private async triggerRhinoJob(urn: string) {
+    // handle rhino
   }
 }
