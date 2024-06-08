@@ -120,7 +120,12 @@ namespace Ark.Revit
                 tx.Start("Export PDF");
 
                 FilteredElementCollector collector = new FilteredElementCollector(doc);
-                ICollection<ElementId> sheetIds = collector.OfClass(typeof(ViewSheet)).ToElementIds();
+                ICollection<ElementId> sheetIds = collector
+                    .OfClass(typeof(ViewSheet))
+                    .Cast<ViewSheet>()
+                    .Where(v => v.CanBePrinted)
+                    .Select(v => v.Id)
+                    .ToList();
 
                 if (sheetIds.Count == 0)
                 {
