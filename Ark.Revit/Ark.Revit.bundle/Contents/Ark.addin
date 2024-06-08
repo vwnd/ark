@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="DBApplication">
+		<Name>Ark.Revit</Name>
+		<Assembly>.\Ark.Revit\Ark.Revit.dll</Assembly>
+		<AddInId>228B0243-33B3-4088-81BC-EF23A209CF83</AddInId>
+		<FullClassName>Ark.Revit.App</FullClassName>
+		<Description>"Syncs to Ark."</Description>
+		<VendorId>Ark</VendorId>
+		<VendorDescription>
+		</VendorDescription>
+	</AddIn>
+</RevitAddIns>

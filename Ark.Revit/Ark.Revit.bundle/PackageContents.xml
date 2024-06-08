@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage
+	Name="Ark.Revit"
+	Description="Ark"
+	Author="ark.dev"
+>
+	<CompanyDetails Name="Ark" Url="http://ark.dev" Email="ark@mail.com"/>
+	<Components Description="Sends to Speckle">
+		<RuntimeRequirements SeriesMax="R2023" SeriesMin="R2023" Platform="Revit" OS="Win64"/>
+		<ComponentEntry
+			LoadOnRevitStartup="True"
+			LoadOnCommandInvocation="False"
+			AppDescription="Sends to Speckle"
+			ModuleName="./Contents/Ark.addin"
+			Version="1.0.0"
+			AppName="Ark Revit"/>
+	</Components>
+</ApplicationPackage>

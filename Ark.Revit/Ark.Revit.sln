@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ark.Revit", "Ark.Revit.csproj", "{640ED774-5597-4EB6-9103-8D00BF216715}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{640ED774-5597-4EB6-9103-8D00BF216715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{640ED774-5597-4EB6-9103-8D00BF216715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{640ED774-5597-4EB6-9103-8D00BF216715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{640ED774-5597-4EB6-9103-8D00BF216715}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0D25BF8-B60A-44F5-9A74-8225C0462C11}
+	EndGlobalSection
+EndGlobal

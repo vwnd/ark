@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autodesk.Forge.DesignAutomation.Revit" Version="2023.0.2" />
+		<PackageReference Include="RevitSharedResources2023" Version="2.19.2" />
+		<PackageReference Include="Speckle.Objects.Converter.Revit2023" Version="2.19.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="RevitAPI">
+	    <HintPath>..\..\..\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Ark.Revit.bundle\Contents\Ark.addin">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="xcopy /Y /F /E /I &quot;$(TargetDir)&quot; &quot;$(ProjectDir)Ark.Revit.bundle\Contents\Ark.Revit&quot;&#xD;&#xA;&quot;C:\Program Files\7-Zip\7z.exe&quot; a -tzip &quot;$(ProjectDir)/Ark.Revit.zip&quot; &quot;$(ProjectDir)Ark.Revit.bundle\&quot; -xr0!*.pdb" />
+	</Target>
+
+</Project>
