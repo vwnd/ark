@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -9,9 +9,6 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  @Post('documents/create')
-  documentCreate() {}
 
   @Get('projects')
   async projects() {

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DrizzlePostgresModule } from '@knaadh/nestjs-drizzle-postgres';
+import { DocumentsModule } from './documents/documents.module';
 import * as schema from './database/drizzle/schema';
 
 @Module({
@@ -15,6 +16,7 @@ import * as schema from './database/drizzle/schema';
         schema: { ...schema },
       },
     }),
+    DocumentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
