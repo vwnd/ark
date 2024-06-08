@@ -10,16 +10,20 @@ namespace Ark.Revit
     [Regeneration(RegenerationOption.Manual)]
     public class App : IExternalDBApplication
     {
+        public bool runInCloud = true;
 
         public ExternalDBApplicationResult OnStartup(ControlledApplication application)
         {
-            #if DEBUG
-            application.ApplicationInitialized += HandleApplicationInitializedEvent;
-            return ExternalDBApplicationResult.Succeeded;
-            #endif
-
-            DesignAutomationBridge.DesignAutomationReadyEvent -= HandleDesignAutomationReadyEvent;
-            return ExternalDBApplicationResult.Succeeded;
+            Console.WriteLine("Starting up ARK.");
+            if (runInCloud)
+            {
+                DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
+                return ExternalDBApplicationResult.Succeeded;
+            } else
+            {
+                application.ApplicationInitialized += HandleApplicationInitializedEvent;
+                return ExternalDBApplicationResult.Succeeded;
+            }
         }
 
         private void HandleApplicationInitializedEvent(object sender, ApplicationInitializedEventArgs e)
@@ -30,7 +34,10 @@ namespace Ark.Revit
 
             if (document == null) throw new InvalidOperationException("Could not open document.");
 
-            var data = new TestDesignAutomationData(filePath, document, app);
+#pragma warning disable CS0618 // Type or member is obsolete
+            var data = new DesignAutomationData(app, filePath);
+#pragma warning restore CS0618 // Type or member is obsolete
+
             Core.Main(data);
         }
 
@@ -41,7 +48,10 @@ namespace Ark.Revit
 
         private void HandleDesignAutomationReadyEvent(object sender, DesignAutomationReadyEventArgs e)
         {
-            Core.Main(e.DesignAutomationData as IDesignAutomationData);
+            Console.WriteLine("Design Automation ready.");
+            e.Succeeded = true;
+            Core.Main(e.DesignAutomationData);
+            Console.WriteLine("Design Automation finished.");
         }
     }
 }

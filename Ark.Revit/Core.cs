@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB;
+using DesignAutomationFramework;
 using Objects.BuiltElements;
 using Objects.Converter.Revit;
 using Speckle.Core.Models;
@@ -29,7 +30,7 @@ namespace Ark.Revit
 
     public class Core
     {
-        public static void Main(IDesignAutomationData data)
+        public static void Main(DesignAutomationData data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
