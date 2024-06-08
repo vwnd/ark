@@ -1,11 +1,29 @@
 <script setup lang="ts">
+import axios from "axios";
 import { ref } from "vue";
 
-// RhinoCompute.url = "http://localhost:6500/";
+async function upload(files: File[]) {
+  if (files.length > 0) {
+    const file = files[0];
+    const data = new FormData();
+    data.append("file", file);
 
-onMounted(() => {
-  // console.log(RhinoCompute);
-});
+    const config = {
+      method: "post",
+      url: "http://10.120.3.191:3000/documents/upload",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: data,
+    };
+
+    await axios(config);
+
+    refresh();
+  }
+}
+
+const { data: documents, refresh } = useFetch("/api/documents");
 
 const project = ref<string | null>("Bojka Tower");
 const fileName = ref<string>("No file selected");
@@ -58,7 +76,7 @@ const handleFileChange = (event: Event) => {
           :trailing="false"
         />
       </div>
-      <BaseTable />
+      <BaseTable :data="documents" @drop="upload" />
       <div>
         <iframe
           title="Speckle"
