@@ -105,6 +105,45 @@ namespace Ark.Revit
             Console.WriteLine("Built commit object.");
 
             SendToSpeckle(rootCommitObject, modelDirectory);
+
+            var sent = SendDeliverables(doc);
+            if (sent)
+            {
+                Console.WriteLine("Deliverables sent.");
+            }
+        }
+
+        private static bool SendDeliverables(Document doc)
+        {
+            using (Transaction tx = new Transaction(doc))
+            {
+                tx.Start("Export PDF");
+
+                FilteredElementCollector collector = new FilteredElementCollector(doc);
+                ICollection<ElementId> sheetIds = collector.OfClass(typeof(ViewSheet)).ToElementIds();
+
+                if (sheetIds.Count == 0)
+                {
+                    Console.WriteLine("No sheets found in the document.");
+                    tx.RollBack();
+                    return false;
+                }
+
+                var workingDirectory = Directory.GetCurrentDirectory();
+
+                PDFExportOptions options = new PDFExportOptions()
+                {
+                    Combine = true,
+                    ExportQuality = PDFExportQualityType.DPI300,
+                    FileName = "deliverables",
+                };
+
+                Console.WriteLine($"Exporting ${sheetIds.Count} deliverables.");
+
+                doc.Export(workingDirectory, sheetIds.ToList(), options);
+                tx.RollBack();
+            }
+            return true;
         }
 
         private static async void SendToSpeckle(Base rootCommitObject, string blobStorageFolder = null)

@@ -64,9 +64,9 @@ export class DocumentsService {
 
     if (autoSync) {
       if (extension === 'rvt') {
-        this.apsService.revitToSpeckle(urn);
+        this.triggerRevitJob(urn);
       } else if (extension === '3dm') {
-        // handle rhino
+        this.triggerRhinoJob(urn);
       }
     }
   }
@@ -85,5 +85,9 @@ export class DocumentsService {
 
   private async triggerRevitJob(urn: string) {
     return this.apsService.revitToSpeckle(urn);
+  }
+
+  private async triggerRhinoJob(urn: string) {
+    // handle rhino
   }
 }

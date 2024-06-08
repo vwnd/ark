@@ -29,3 +29,12 @@ export const documents = pgTable('documents', {
     .references(() => projects.id),
   urn: text('urn'),
 });
+
+export const deliverables = pgTable('deliverables', {
+  id: uuid('id').defaultRandom(),
+  name: text('name').notNull(),
+  type: varchar('type').notNull(),
+  documentId: uuid('document_id')
+    .notNull()
+    .references(() => documents.id),
+});
