@@ -63,23 +63,7 @@ export class DocumentsService {
       .where(eq(schema.documents.id, document.id));
   }
 
-  create(createDocumentDto: CreateDocumentDto) {
-    return 'This action adds a new document';
-  }
-
-  findAll() {
-    return `This action returns all documents`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} document`;
-  }
-
-  update(id: number, updateDocumentDto: UpdateDocumentDto) {
-    return `This action updates a #${id} document`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} document`;
+  async findAll() {
+    return this.drizzle.query.documents.findMany();
   }
 }
