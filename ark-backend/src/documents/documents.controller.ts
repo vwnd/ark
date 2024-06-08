@@ -48,7 +48,7 @@ export class DocumentsController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  uploadDocument(@UploadedFile() file: Express.Multer.File) {
+    return this.documentsService.uploadDocument(file);
   }
 }

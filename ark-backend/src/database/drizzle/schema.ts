@@ -4,8 +4,8 @@ import {
   serial,
   text,
   varchar,
-  pgEnum,
   integer,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 export const migrations = pgTable('migrations', {
@@ -15,18 +15,17 @@ export const migrations = pgTable('migrations', {
   name: varchar('name').notNull(),
 });
 
-export const documentTypeEnum = pgEnum('document_type', ['pdf', 'rvt', '3dm']);
-
 export const projects = pgTable('projects', {
   id: serial('id').primaryKey().notNull(),
   speckleId: text('speckle_id').notNull(),
 });
 
 export const documents = pgTable('documents', {
-  id: serial('id').primaryKey().notNull(),
+  id: uuid('id').defaultRandom(),
   name: text('name').notNull(),
-  type: documentTypeEnum('type').notNull(),
+  type: varchar('type').notNull(),
   projectId: integer('project_id')
     .notNull()
     .references(() => projects.id),
+  urn: text('urn'),
 });

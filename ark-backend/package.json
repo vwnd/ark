@@ -20,8 +20,12 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aps_sdk/authentication": "0.1.0-beta.1",
+    "@aps_sdk/autodesk-sdkmanager": "0.0.7-beta.1",
+    "@aps_sdk/oss": "0.1.0-beta.1",
     "@knaadh/nestjs-drizzle-postgres": "^1.0.0",
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
