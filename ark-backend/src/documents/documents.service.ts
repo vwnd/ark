@@ -27,9 +27,7 @@ export class DocumentsService {
     private readonly drizzle: PostgresJsDatabase<typeof schema>,
   ) {}
 
-  async uploadDocument(file: Express.Multer.File) {
-    // create document in db
-
+  async uploadDocument(file: Express.Multer.File, autoSync?: boolean) {
     // file.originalname will have extension, slice the string to get it
     const extension = file.originalname.slice(
       file.originalname.lastIndexOf('.') + 1,
@@ -63,6 +61,14 @@ export class DocumentsService {
       .update(schema.documents)
       .set({ urn })
       .where(eq(schema.documents.id, document.id));
+
+    if (autoSync) {
+      if (extension === 'rvt') {
+        this.apsService.revitToSpeckle(urn);
+      } else if (extension === '3dm') {
+        // handle rhino
+      }
+    }
   }
 
   async findAll() {
@@ -75,5 +81,9 @@ export class DocumentsService {
 
   private async uploadRevit(file, key) {
     return this.apsService.uploadFile(key, file);
+  }
+
+  private async triggerRevitJob(urn: string) {
+    return this.apsService.revitToSpeckle(urn);
   }
 }
