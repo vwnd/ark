@@ -2,7 +2,11 @@
 import axios from "axios";
 import { ref } from "vue";
 
+const pending = ref(false);
+
 async function upload(files: File[]) {
+  pending.value = true;
+
   if (files.length > 0) {
     const file = files[0];
     const data = new FormData();
@@ -21,6 +25,8 @@ async function upload(files: File[]) {
 
     refresh();
   }
+
+  pending.value = false;
 }
 
 const { data: documents, refresh } = useFetch("/api/documents");
@@ -76,8 +82,13 @@ const handleFileChange = (event: Event) => {
           :trailing="false"
         />
       </div>
-      <BaseTable :data="documents" @drop="upload" />
-      <div>
+      <BaseTable
+        :data="documents"
+        @drop="upload"
+        v-model="pending"
+        class="pb-10"
+      />
+      <div class="border rounded-lg">
         <iframe
           title="Speckle"
           src="https://app.speckle.systems/projects/f97a0b4c05/models/3e6646ea69,e00437cc0d,ec537459b4#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%7D"

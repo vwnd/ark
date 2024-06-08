@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import axios from "axios";
 import { ref } from "vue";
 
 const emits = defineEmits(["drop"]);
+const pending = defineModel();
 
 // Define interfaces
 interface Document {
@@ -65,7 +65,7 @@ const handleDragLeave = () => {
 const handleDrop = async (event: DragEvent) => {
   event.preventDefault();
 
-  emits("drop", event.dataTransfer.files);
+  emits("drop", event.dataTransfer?.files);
   isDraggingOver.value = false;
 };
 </script>
@@ -95,34 +95,73 @@ const handleDrop = async (event: DragEvent) => {
       </div>
 
       <UTable
+        :progress="{ color: 'primary', animation: 'carousel' }"
+        :loading="pending"
         :columns="selectedColumns"
         :rows="props.data"
         :sort="sort"
         class="h-80"
-      />
+      >
+        <template #loading-state>
+          <div class="flex items-center justify-center h-32">
+            <i class="loader --6" />
+          </div>
+        </template>
+      </UTable>
     </div>
   </div>
 </template>
 
-<style>
-/* Global scrollbar styles */
-::-webkit-scrollbar {
-  width: 10px; /* Make the scrollbar narrow */
-  height: 10px; /* For horizontal scrollbar */
+<style scoped>
+.loader {
+  --color: rgb(var(--color-primary-400));
+  --size-mid: 6vmin;
+  --size-dot: 1.5vmin;
+  --size-bar: 0.4vmin;
+  --size-square: 3vmin;
+
+  display: block;
+  position: relative;
+  width: 50%;
+  display: grid;
+  place-items: center;
 }
 
-::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Light gray background */
-  border-radius: 10px; /* Rounded corners */
+.loader::before,
+.loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #b0b0b0; /* Gray thumb */
-  border-radius: 10px; /* Rounded corners */
-  border: 2px solid #f0f0f0; /* Optional: creates a space around the thumb */
+/**
+    loader --6
+**/
+.loader.--6::before {
+  width: var(--size-square);
+  height: var(--size-square);
+  background-color: var(--color);
+  top: calc(50% - var(--size-square));
+  left: calc(50% - var(--size-square));
+  animation: loader-6 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #a0a0a0; /* Darker gray on hover */
+@keyframes loader-6 {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  25% {
+    transform: translateX(100%);
+  }
+
+  50% {
+    transform: translateX(100%) translateY(100%);
+  }
+
+  75% {
+    transform: translateY(100%);
+  }
 }
 </style>
