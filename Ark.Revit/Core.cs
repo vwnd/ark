@@ -1,11 +1,8 @@
 ﻿using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB;
-using DesignAutomationFramework;
 using Objects.BuiltElements;
 using Objects.Converter.Revit;
-using Objects.Geometry;
 using Speckle.Core.Models;
-using System.Diagnostics;
 
 namespace Ark.Revit
 {
@@ -50,11 +47,13 @@ namespace Ark.Revit
             
             var converter = new ConverterRevit();
             converter.SetContextDocument(doc);
+            var revitDocumentAggregateCache = new RevitDocumentAggregateCache(doc);
+            converter.SetContextDocument(revitDocumentAggregateCache);
 
-            //var speckleObjects = converter.ConvertToSpeckle(columns[0]);
-            var speckleObjects = MockObjects();
+            var speckleObjects = converter.ConvertToSpeckle(columns[0]);
+            //var speckleObjects = MockObjects();
 
-            Debug.WriteLine($"Converted {columns.Count} columns to {speckleObjects.GetTotalChildrenCount()} Speckle objects.");
+            Console.WriteLine($"Converted {columns.Count} columns to {speckleObjects.GetTotalChildrenCount()} Speckle objects.");
         }
 
         private static Base MockObjects()

@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="xcopy /Y /F &quot;$(TargetDir)&quot; &quot;$(ProjectDir)Ark.Revit.bundle\Contents\Ark.Revit&quot;&#xD;&#xA;&quot;C:\Program Files\7-Zip\7z.exe&quot; a -tzip &quot;$(ProjectDir)/Ark.Revit.zip&quot; &quot;$(ProjectDir)Ark.Revit.bundle\&quot; -xr0!*.pdb" />
+	  <Exec Command="xcopy /Y /F &quot;$(TargetDir)&quot; &quot;$(ProjectDir)Ark.Revit.bundle\Contents\Ark.Revit&quot;&#xD;&#xA;&quot;C:\Program Files\7-Zip\7z.exe&quot; a -tzip &quot;$(ProjectDir)/Ark.Revit.zip&quot; &quot;$(ProjectDir)Ark.Revit.bundle\&quot; -xr0!*.pdb&#xD;&#xA;xcopy /Y /F &quot;$(ProjectDir)Ark.Revit.bundle\&quot; &quot;$(ProjectDir)Ark.Revit.bundle\Contents\Ark.Revit&quot;" />
 	</Target>
 
 </Project>
