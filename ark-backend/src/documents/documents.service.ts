@@ -70,11 +70,7 @@ export class DocumentsService {
   }
 
   private async uploadRhino(file, key): Promise<string> {
-    return await this.storageService.uploadFile(
-      file.buffer,
-      key,
-      file.mimetype,
-    );
+    return this.storageService.uploadFile(file.buffer, key, file.mimetype);
   }
 
   private async uploadRevit(file, key) {
