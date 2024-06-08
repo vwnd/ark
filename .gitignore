@@ -5,3 +5,9 @@
 /Ark.Revit/.vs/Ark.Revit
 /Ark.Revit/bin/Debug/net48
 /Ark.Revit/obj
+/Ark.Revit/Ark.Revit.zip
+/Ark.Revit/.vs/ProjectEvaluation
+
+/Ark.Revit/Ark.Revit.bundle/Contents/*
+!/Ark.Revit/Ark.Revit.bundle/Contents/Ark.addin
+
