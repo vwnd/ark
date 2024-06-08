@@ -1,12 +1,11 @@
 import { ForbiddenException, Inject, Injectable, Logger } from '@nestjs/common';
-import { CreateDocumentDto } from './dto/create-document.dto';
-import { UpdateDocumentDto } from './dto/update-document.dto';
 import { SdkManagerBuilder } from '@aps_sdk/autodesk-sdkmanager';
 import { OssClient } from '@aps_sdk/oss';
 import { ApsService } from 'src/aps/aps.service';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../database/drizzle/schema';
 import { eq } from 'drizzle-orm';
+import { StorageService } from 'src/storage/storage.service';
 
 @Injectable()
 export class DocumentsService {
@@ -23,6 +22,7 @@ export class DocumentsService {
 
   constructor(
     private readonly apsService: ApsService,
+    private readonly storageService: StorageService,
     @Inject('DATABASE')
     private readonly drizzle: PostgresJsDatabase<typeof schema>,
   ) {}
@@ -53,10 +53,19 @@ export class DocumentsService {
 
     this.logger.debug(document);
 
-    const urn = await this.apsService.uploadFile(
-      `${projectId}/${document.id}`,
-      file,
-    );
+    let urn;
+    if (extension === 'rvt') {
+      urn = await this.apsService.uploadFile(
+        `${projectId}/${document.id}`,
+        file,
+      );
+    } else if (extension === '3dm') {
+      urn = await this.storageService.uploadFile(
+        file.buffer,
+        `${projectId}/${document.id}`,
+        file.mimetype,
+      );
+    }
     await this.drizzle
       .update(schema.documents)
       .set({ urn })

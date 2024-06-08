@@ -7,6 +7,7 @@ import { ApsModule } from './aps/aps.module';
 import * as schema from './database/drizzle/schema';
 import { ConfigModule } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MulterModule } from '@nestjs/platform-express';
     ApsModule,
     MulterModule.register(),
     ConfigModule.forRoot(),
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
