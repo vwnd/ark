@@ -1,68 +1,55 @@
 <script setup lang="ts">
+import axios from "axios";
 import { ref } from "vue";
 
-const columns = [
+const emits = defineEmits(["drop"]);
+
+// Define interfaces
+interface Document {
+  id: string;
+  name: string;
+  type: string;
+  projectId: number;
+  urn: string;
+}
+
+interface Column {
+  key: string;
+  sortable?: boolean;
+  label: string;
+  direction?: "asc" | "desc";
+}
+
+// Define props with types
+const props = defineProps<{
+  data: Document[];
+}>();
+
+const sort = ref({
+  column: "name",
+  direction: "desc",
+});
+
+// Define columns with the correct types
+const columns: Column[] = [
   {
     key: "name",
     sortable: true,
     label: "Name",
   },
   {
-    key: "title",
+    key: "type",
     sortable: true,
-    label: "Title",
+    label: "Type",
   },
+
   {
-    key: "email",
-    sortable: true,
-    label: "Email",
-  },
-  {
-    key: "role",
-    sortable: true,
-    label: "Role",
+    key: "urn",
+    label: "URN",
   },
 ];
 
-const selectedColumns = ref([...columns]);
-
-const people = [
-  {
-    id: 2,
-    name: "Belmon Dawg",
-    title: "Designer",
-    email: "courtney.henry@example.com",
-    role: "Admin",
-  },
-  {
-    id: 3,
-    name: "Tom Cook",
-    title: "Director of Product",
-    email: "tom.cook@example.com",
-    role: "Member",
-  },
-  {
-    id: 4,
-    name: "Whitney Francis",
-    title: "Copywriter",
-    email: "whitney.francis@example.com",
-    role: "Admin",
-  },
-  {
-    id: 5,
-    name: "Leonard Krasner",
-    title: "Senior Designer",
-    email: "leonard.krasner@example.com",
-    role: "Owner",
-  },
-  {
-    id: 6,
-    name: "Floyd Miles",
-    title: "Principal Designer",
-    email: "floyd.miles@example.com",
-    role: "Member",
-  },
-];
+const selectedColumns = ref<Column[]>([...columns]);
 
 const isDraggingOver = ref(false);
 
@@ -75,10 +62,11 @@ const handleDragLeave = () => {
   isDraggingOver.value = false;
 };
 
-const handleDrop = (event: DragEvent) => {
+const handleDrop = async (event: DragEvent) => {
   event.preventDefault();
+
+  emits("drop", event.dataTransfer.files);
   isDraggingOver.value = false;
-  // Handle file drop logic here
 };
 </script>
 
@@ -106,9 +94,35 @@ const handleDrop = (event: DragEvent) => {
         />
       </div>
 
-      <UTable :columns="selectedColumns" :rows="people" class="h-80" />
+      <UTable
+        :columns="selectedColumns"
+        :rows="props.data"
+        :sort="sort"
+        class="h-80"
+      />
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style>
+/* Global scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px; /* Make the scrollbar narrow */
+  height: 10px; /* For horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Light gray background */
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* Gray thumb */
+  border-radius: 10px; /* Rounded corners */
+  border: 2px solid #f0f0f0; /* Optional: creates a space around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Darker gray on hover */
+}
+</style>
