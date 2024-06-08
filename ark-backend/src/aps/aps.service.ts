@@ -5,6 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { OssClient } from '@aps_sdk/oss';
 import * as fs from 'fs';
 import * as path from 'path';
+import { HttpService } from '@nestjs/axios';
+import { catchError, firstValueFrom } from 'rxjs';
+import { AxiosError } from 'axios';
 
 @Injectable()
 export class ApsService {
@@ -15,7 +18,11 @@ export class ApsService {
   bucketkey = 'ark-storage';
 
   logger = new Logger(ApsService.name);
-  constructor(private readonly configService: ConfigService) {
+
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
+  ) {
     this.sdkManager = SdkManagerBuilder.create().build();
     this.authenticationClient = new AuthenticationClient(this.sdkManager);
     this.ossClient = new OssClient(this.sdkManager);
@@ -70,5 +77,45 @@ export class ApsService {
     } finally {
       fs.unlinkSync(tempFilePath);
     }
+  }
+
+  async revitToSpeckle(objectKey) {
+    const access_token = await this.getTwoLeggedToken();
+    const activity = {
+      activityId: 'Ark.ArkActivity+test',
+      arguments: {
+        rvtFile: {
+          url: objectKey,
+          verb: 'get',
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      },
+    };
+
+    this.logger.debug('starting revit to speckle workitem');
+    const response = await firstValueFrom(
+      this.httpService
+        .post(
+          'https://developer.api.autodesk.com/da/us-east/v3/workitems',
+          JSON.stringify(activity),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${access_token}`,
+            },
+          },
+        )
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
+    );
+
+    this.logger.debug(response.status);
+    this.logger.debug(response.data);
   }
 }

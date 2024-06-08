@@ -8,6 +8,7 @@ import * as schema from './database/drizzle/schema';
 import { ConfigModule } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 import { StorageModule } from './storage/storage.module';
+import { DeliverablesModule } from './deliverables/deliverables.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { StorageModule } from './storage/storage.module';
     MulterModule.register(),
     ConfigModule.forRoot(),
     StorageModule,
+    DeliverablesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
