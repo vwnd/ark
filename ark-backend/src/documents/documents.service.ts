@@ -55,16 +55,9 @@ export class DocumentsService {
 
     let urn;
     if (extension === 'rvt') {
-      urn = await this.apsService.uploadFile(
-        `${projectId}/${document.id}`,
-        file,
-      );
+      urn = await this.uploadRevit(file, `${projectId}/${document.id}`);
     } else if (extension === '3dm') {
-      urn = await this.storageService.uploadFile(
-        file.buffer,
-        `${projectId}/${document.id}`,
-        file.mimetype,
-      );
+      urn = await this.uploadRhino(file, `${projectId}/${document.id}`);
     }
     await this.drizzle
       .update(schema.documents)
@@ -74,5 +67,17 @@ export class DocumentsService {
 
   async findAll() {
     return this.drizzle.query.documents.findMany();
+  }
+
+  private async uploadRhino(file, key): Promise<string> {
+    return await this.storageService.uploadFile(
+      file.buffer,
+      key,
+      file.mimetype,
+    );
+  }
+
+  private async uploadRevit(file, key) {
+    return this.apsService.uploadFile(key, file);
   }
 }
