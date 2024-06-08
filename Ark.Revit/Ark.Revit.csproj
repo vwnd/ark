@@ -8,10 +8,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Autodesk.Forge.DesignAutomation.Revit" Version="2023.0.2" />
-		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2023.0.0">
-			<IncludeAssets></IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="RevitSharedResources2023" Version="2.19.2" />
 		<PackageReference Include="Speckle.Objects.Converter.Revit2023" Version="2.19.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="RevitAPI">
+	    <HintPath>..\..\..\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -20,8 +24,12 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Ark.Revit.bundle\Contents\Ark.Revit\" />
+	</ItemGroup>
+
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="xcopy /Y /F &quot;$(TargetDir)*.dll&quot; &quot;$(ProjectDir)Ark.Revit.bundle\Contents\&quot;&#xD;&#xA;&quot;C:\Program Files\7-Zip\7z.exe&quot; a -tzip &quot;$(ProjectDir)/Ark.Revit.zip&quot; &quot;$(ProjectDir)Ark.Revit.bundle\&quot; -xr0!*.pdb" />
+	  <Exec Command="xcopy /Y /F &quot;$(TargetDir)&quot; &quot;$(ProjectDir)Ark.Revit.bundle\Contents\Ark.Revit&quot;&#xD;&#xA;&quot;C:\Program Files\7-Zip\7z.exe&quot; a -tzip &quot;$(ProjectDir)/Ark.Revit.zip&quot; &quot;$(ProjectDir)Ark.Revit.bundle\&quot; -xr0!*.pdb" />
 	</Target>
 
 </Project>
