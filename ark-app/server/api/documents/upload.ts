@@ -43,7 +43,6 @@ async function triggerRhinoJob(file: File) {
 
     let p = fetch(url + endpoint, request);
     const json = p.then((r) => r.json());
-    console.log(json);
 
     return json;
   } catch (error) {

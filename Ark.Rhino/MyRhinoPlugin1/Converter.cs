@@ -28,12 +28,16 @@ namespace MyRhinoPlugin1
 
                 // Decode the base64 string
                 var decodedData = Convert.FromBase64String(data);
+                var openedDoc = File3dm.FromByteArray(decodedData);
+
+                Console.WriteLine("DECODED DATA LENGTH "+decodedData.Length );
                 Console.WriteLine("Decoded base64 data.");
+                Console.WriteLine(openedDoc.Objects.Count);
 
-                string filePath = @"N:\Denmark\ZCZ\Daniel_tu_byl\BrepModel-Fancy.3dm";
-                Console.WriteLine($"Reading Rhino file from {filePath}.");
+                // string filePath = @"N:\Denmark\ZCZ\Daniel_tu_byl\BrepModel-Fancy.3dm";
+                // Console.WriteLine($"Reading Rhino file from {filePath}.");
 
-                var openedDoc = File3dm.Read(filePath);
+                // var openedDoc = File3dm.Read(filePath);
                 if (openedDoc == null)
                 {
                     Console.WriteLine("Failed to open the Rhino file.");
@@ -80,9 +84,7 @@ namespace MyRhinoPlugin1
                 Console.WriteLine("Headless doc count: " + openedDoc.Objects.Count);
                 foreach (var obj in headlessDoc.Objects)
                 {
-                    Console.WriteLine("object " + obj.ToString() + obj.GetType());
                     var canConvert = converter.CanConvertToSpeckle(obj.Geometry);
-                    Console.WriteLine("Can convert: " + canConvert);
 
                     if (!canConvert) continue;
 
