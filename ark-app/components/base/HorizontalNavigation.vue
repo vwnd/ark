@@ -11,7 +11,7 @@ const links = [
     icon: "i-heroicons-home",
   },
   {
-    label: "Drawings",
+    label: "Deliverables",
     icon: "i-heroicons-square-2-stack",
   },
 ];

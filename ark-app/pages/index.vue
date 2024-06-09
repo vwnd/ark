@@ -85,7 +85,7 @@ const handleFileChange = (event: Event) => {
           size="sm"
           color="primary"
           variant="solid"
-          label="Uplaod"
+          label="Upload"
           :trailing="false"
         />
       </div>
