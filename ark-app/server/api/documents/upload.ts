@@ -2,7 +2,10 @@ import { eq } from "drizzle-orm";
 import { db } from "~/db/drizzle";
 import { documents } from "~/db/schema";
 import { uploadFile } from "~/server/services/storage";
-import { uploadFile as uploadFileToAPS } from "~/server/services/aps";
+import {
+  revitToSpeckle,
+  uploadFile as uploadFileToAPS,
+} from "~/server/services/aps";
 
 async function uploadRhino(file: File, key: string) {
   const arrayBuffer = await file.arrayBuffer();
@@ -14,7 +17,7 @@ async function uploadRevit(file: File, key: string) {
 }
 
 async function triggerRevitJob(urn: string) {
-  // return this.apsService.revitToSpeckle(urn);
+  return revitToSpeckle(urn);
 }
 
 async function triggerRhinoJob(file: File) {

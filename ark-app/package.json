@@ -21,10 +21,12 @@
     "nuxt": "^3.11.2",
     "postgres": "^3.4.4",
     "rhino3dm": "^8.6.1",
+    "uuid": "^9.0.1",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
     "drizzle-kit": "^0.22.6"
   }
 }

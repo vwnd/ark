@@ -34,6 +34,7 @@ export const deliverables = pgTable("deliverables", {
   id: uuid("id").defaultRandom(),
   name: text("name").notNull(),
   type: varchar("type").notNull(),
+  key: text("key").notNull(),
   documentId: uuid("document_id")
     .notNull()
     .references(() => documents.id),

@@ -11,6 +11,13 @@ import { Readable } from "stream";
 
 const streamPipeline = promisify(pipeline);
 
+if (
+  !process.env.S3_ACCESS_KEY_ID ||
+  !process.env.S3_SECRET_ACCESS_KEY ||
+  !process.env.S3_REGION
+)
+  throw new Error("Missing S3 credentials");
+
 const s3Client: S3Client = new S3Client({
   credentials: {
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
@@ -39,7 +46,7 @@ export async function uploadFile(
 
     return name;
   } catch (error) {
-    console.error(error);
+    throw new Error("Failed to upload file");
   }
 }
 

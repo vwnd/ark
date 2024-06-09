@@ -3,6 +3,7 @@ import { AuthenticationClient } from "@aps_sdk/authentication";
 import { OssClient } from "@aps_sdk/oss";
 import * as fs from "fs";
 import * as path from "path";
+import axios from "axios";
 
 const sdkManager = SdkManagerBuilder.create().build();
 const authenticationClient = new AuthenticationClient(sdkManager);
@@ -36,6 +37,11 @@ export async function uploadFile(objectKey: string, file: File) {
   const randomTmpKey = Math.random().toString(36).substring(7);
   const tempFilePath = path.join(process.cwd(), "tmp", randomTmpKey);
 
+  // ensure tmp folder exists
+  if (!fs.existsSync(path.join(process.cwd(), "tmp"))) {
+    fs.mkdirSync(path.join(process.cwd(), "tmp"));
+  }
+
   const buffer = Buffer.from(await file.arrayBuffer());
   fs.writeFileSync(tempFilePath, buffer);
 
@@ -52,5 +58,38 @@ export async function uploadFile(objectKey: string, file: File) {
   } catch (error) {
   } finally {
     fs.unlinkSync(tempFilePath);
+  }
+}
+
+export async function revitToSpeckle(revitFileObjectKey: string) {
+  const access_token = await getTwoLeggedToken();
+  const activity = {
+    activityId: "Ark.ArkActivity+test",
+    arguments: {
+      rvtFile: {
+        url: revitFileObjectKey,
+        verb: "get",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      },
+    },
+  };
+
+  try {
+    const response = await axios.post(
+      "https://developer.api.autodesk.com/da/us-east/v3/workitems",
+      JSON.stringify(activity),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    console.log("revit.to.speckle:", response.status, response.data);
+  } catch (error) {
+    console.error(error);
   }
 }
