@@ -15,7 +15,7 @@ import { DeliverablesModule } from './deliverables/deliverables.module';
     DrizzlePostgresModule.register({
       tag: 'DATABASE',
       postgres: {
-        url: 'postgres://username:password@localhost:5432/ark',
+        url: process.env.DB_URL,
       },
       config: {
         schema: { ...schema },

@@ -9,9 +9,9 @@ export default defineConfig({
     database: process.env.DB_NAME,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    host: 'localhost',
+    host: process.env.DB_HOST,
     port: 5432,
-    ssl: false,
+    ssl: 'require',
   },
   // Print all statements
   verbose: true,

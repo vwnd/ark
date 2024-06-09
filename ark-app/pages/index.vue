@@ -12,16 +12,23 @@ async function upload(files: File[]) {
     const data = new FormData();
     data.append("file", file);
 
-    const config = {
-      method: "post",
-      url: "http://10.120.3.191:3000/documents/upload",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: data,
-    };
+    // const config = {
+    //   method: "post",
+    //   url: "http://10.120.3.191:3000/documents/upload",
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    //   data: data,
+    // };
 
-    await axios(config);
+    const response = await useFetch("/api/documents/upload", {
+      method: "post",
+      body: data,
+      headers: { "cache-control": "no-cache" },
+    });
+
+    console.log(response);
+    // await axios(config);
 
     refresh();
   }
