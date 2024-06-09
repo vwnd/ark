@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event);
 
   console.log("formData", formData);
-  const file = formData?.find((item) => item.name === "file");
+  const file = formData![0];
 
   if (!file) return;
 
