@@ -10,6 +10,7 @@ using Speckle.Core.Helpers;
 using Speckle.Core.Logging;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
+using Speckle.Newtonsoft.Json.Serialization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Policy;
@@ -94,11 +95,8 @@ namespace Ark.Revit
 
             foreach (var column in columns)
             {
-                Console.WriteLine($"Converting column {column.Id}.");
                 Base result = converter.ConvertToSpeckle(column);
-                Console.WriteLine($"Converted column {column.Id}.");
                 commitBuilder.IncludeObject(result, column);
-                Console.WriteLine($"Included column {column.Id} in commit.");
             }
 
             var rootCommitObject = converter.ConvertToSpeckle(doc) ?? new Collection();
@@ -158,14 +156,20 @@ namespace Ark.Revit
                     {
                         var filePath = Path.Combine(workingDirectory, "deliverables.pdf");
                         // Add other form fields
-                        multipartFormContent.Add(new StringContent("value1"), "field1");
-                        multipartFormContent.Add(new StringContent("value2"), "field2");
+
+                        var fileExists = File.Exists(filePath);
+                        if (!fileExists)
+                        {
+                            Console.WriteLine("File does not exist.");
+                            tx.RollBack();
+                            return false;
+                        }
 
                         // Add the file content
                         var fileStream = File.OpenRead(filePath);
                         var fileContent = new StreamContent(fileStream);
-                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-                        multipartFormContent.Add(fileContent, "fileField", Path.GetFileName(filePath));
+                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/pdf");
+                        multipartFormContent.Add(fileContent, "file", Path.GetFileName(filePath));
 
                         // Send the request
                         var response = await httpClient.PostAsync(url, multipartFormContent);
@@ -175,10 +179,13 @@ namespace Ark.Revit
                         {
                             var responseContent = await response.Content.ReadAsStringAsync();
                             Console.WriteLine("Response: " + responseContent);
+                            return true;
                         }
                         else
                         {
-                            Console.WriteLine("Error: " + response.StatusCode);
+                            var errorContent = await response.Content.ReadAsStringAsync();
+                            Console.WriteLine("Error: " + response.StatusCode + " " + errorContent);
+                            return false;
                         }
                     }
                 }
