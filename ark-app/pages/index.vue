@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Column } from "postgres";
 import { ref } from "vue";
 import type { Item } from "~/components/base/Table.vue";
 
@@ -100,7 +101,13 @@ const handleFileChange = (event: Event) => {
       <div>
         <BaseTabs v-model="tableMode" />
       </div>
-      <BaseTable :data="data" @drop="upload" v-model="pending" class="pb-10" />
+      <BaseTable
+        :data="data"
+        @drop="upload"
+        :mode="tableMode"
+        v-model="pending"
+        class="pb-10"
+      />
       <div class="border rounded-lg">
         <iframe
           title="Speckle"

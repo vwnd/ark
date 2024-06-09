@@ -4,33 +4,7 @@ import { ref } from "vue";
 const emits = defineEmits(["drop"]);
 const pending = defineModel();
 
-export interface Item {
-  id: string;
-  name: string;
-  type: string;
-  projectId: number;
-  urn: string;
-}
-
-interface Column {
-  key: string;
-  sortable?: boolean;
-  label: string;
-  direction?: "asc" | "desc";
-}
-
-// Define props with types
-const props = defineProps<{
-  data: Document[];
-}>();
-
-const sort = ref({
-  column: "name",
-  direction: "desc",
-});
-
-// Define columns with the correct types
-const columns: Column[] = [
+const columns = ref<Column[]>([
   {
     key: "name",
     sortable: true,
@@ -41,16 +15,87 @@ const columns: Column[] = [
     sortable: true,
     label: "Type",
   },
-
   {
     key: "status",
     label: "Status",
   },
-];
+  {
+    key: "actions",
+  },
+]);
 
-const selectedColumns = ref<Column[]>([...columns]);
-
+const selectedColumns = ref<Column[]>([...columns.value]);
 const isDraggingOver = ref(false);
+
+// Define props with types
+const props = defineProps<{
+  data: Item[];
+  mode: number;
+}>();
+
+export interface Item {
+  id: string;
+  name: string;
+  type: string;
+  projectId: number;
+  urn: string;
+}
+
+export interface Column {
+  key: string;
+  sortable?: boolean;
+  label?: string;
+  direction?: "asc" | "desc";
+}
+
+const sort = ref({
+  column: "name",
+  direction: "desc",
+});
+
+watchEffect(() => {
+  switch (props.mode) {
+    case 0:
+      if (props.data) selectedColumns.value = [...columns.value];
+      break;
+    case 1:
+      if (props.data) selectedColumns.value = [...columns.value];
+      break;
+    case 2:
+      if (props.data)
+        selectedColumns.value = [
+          ...columns.value.filter((column) => column.key !== "status"),
+        ];
+      break;
+  }
+});
+
+const items = (row) => [
+  [
+    {
+      label: "Edit Name",
+      icon: "i-heroicons-pencil-square-20-solid",
+      click: () => console.log("Edit", row.id),
+    },
+    {
+      label: "Duplicate",
+      icon: "i-heroicons-document-duplicate-20-solid",
+    },
+  ],
+  [
+    {
+      label: "Download",
+      icon: "i-heroicons-arrow-down-on-square",
+      click: () => console.log("Download", row.id),
+    },
+  ],
+  [
+    {
+      label: "Delete",
+      icon: "i-heroicons-trash-20-solid",
+    },
+  ],
+];
 
 const handleDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -113,6 +158,16 @@ const handleDrop = async (event: DragEvent) => {
           <div class="flex items-center justify-center h-32">
             <i class="loader --6" />
           </div>
+        </template>
+
+        <template #actions-data="{ row }">
+          <UDropdown :items="items(row)">
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-ellipsis-horizontal-20-solid"
+            />
+          </UDropdown>
         </template>
       </UTable>
     </div>

@@ -72,11 +72,10 @@ export default defineEventHandler(async (event) => {
         projectId,
         name: file.name,
         type: extension,
+        status: "progress",
       })
       .returning()
   )[0];
-
-  console.log("EXTENSION", extension);
 
   let urn;
   if (extension === "rvt") {
@@ -96,4 +95,9 @@ export default defineEventHandler(async (event) => {
       triggerRhinoJob(file);
     }
   }
+
+  await db
+    .update(documents)
+    .set({ status: "done" })
+    .where(eq(documents.id, document.id));
 });
