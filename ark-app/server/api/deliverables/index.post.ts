@@ -28,5 +28,5 @@ export default defineEventHandler(async (event) => {
     })
     .returning();
 
-  return result[0];
+  return key;
 });

@@ -33,7 +33,7 @@ export const documents = pgTable("documents", {
 });
 
 export const deliverables = pgTable("deliverables", {
-  id: uuid("id").defaultRandom(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   type: varchar("type").notNull(),
   key: text("key").notNull(),
