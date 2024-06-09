@@ -88,6 +88,8 @@ export class DocumentsService {
   }
 
   private async triggerRhinoJob(urn: string) {
+    // download model from s3 save on disk
+    // hit compute
     // handle rhino
   }
 }
