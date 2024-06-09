@@ -17,17 +17,42 @@ async function triggerRevitJob(urn: string) {
   // return this.apsService.revitToSpeckle(urn);
 }
 
-async function triggerRhinoJob(urn: string) {
-  // download model from s3 save on disk
-  // hit compute
-  // handle rhino
+async function triggerRhinoJob(file: File) {
+  const url = "http://localhost:6500/";
+
+  const version = "8.0";
+  const endpoint = "speckle-converter/converttospeckle-string";
+
+  const arglist = [];
+
+  const filebase64 = await file.arrayBuffer().then((buffer) => {
+    return Buffer.from(buffer).toString("base64");
+  });
+
+  arglist.push(filebase64);
+
+  try {
+    let request = {
+      method: "POST",
+      body: JSON.stringify(arglist),
+      headers: { "User-Agent": `compute.rhino3d.js/${version}` },
+    };
+
+    let p = fetch(url + endpoint, request);
+    const json = p.then((r) => r.json());
+    console.log(json);
+
+    return json;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export default defineEventHandler(async (event) => {
   // handle upload
   // fixed projecid
   const projectId = 1;
-  const autoSync = false;
+  const autoSync = true;
 
   const formData = await readFormData(event);
 
@@ -49,6 +74,8 @@ export default defineEventHandler(async (event) => {
       .returning()
   )[0];
 
+  console.log("EXTENSION", extension);
+
   let urn;
   if (extension === "rvt") {
     urn = await uploadRevit(file, `${projectId}/${document.id}`);
@@ -64,7 +91,7 @@ export default defineEventHandler(async (event) => {
     if (extension === "rvt") {
       triggerRevitJob(urn);
     } else if (extension === "3dm") {
-      triggerRhinoJob(urn);
+      triggerRhinoJob(file);
     }
   }
 });

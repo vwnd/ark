@@ -1,4 +1,15 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
+import * as fs from "fs";
+import * as path from "path";
+import { pipeline } from "stream";
+import { promisify } from "util";
+import { Readable } from "stream";
+
+const streamPipeline = promisify(pipeline);
 
 const s3Client: S3Client = new S3Client({
   credentials: {
@@ -29,5 +40,29 @@ export async function uploadFile(
     return name;
   } catch (error) {
     console.error(error);
+  }
+}
+
+export async function downloadFile(urn: string, bucketName: string) {
+  try {
+    const command = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: urn,
+    });
+    const response = await s3Client.send(command);
+
+    const filePath = path.join(process.cwd(), "downloads", urn);
+    await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+
+    const readableStream = new Readable().wrap(response.Body as any);
+    const writeStream = fs.createWriteStream(filePath);
+
+    await streamPipeline(readableStream, writeStream);
+
+    console.log(`File downloaded to ${filePath}`);
+    return filePath;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Could not download file");
   }
 }
