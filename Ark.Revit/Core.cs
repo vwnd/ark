@@ -11,6 +11,7 @@ using Speckle.Core.Logging;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Ark.Revit
 {
@@ -149,6 +150,7 @@ namespace Ark.Revit
                 var url = "https://ark-sable.vercel.app/api/deliverables";
 
                 var formData = new MultipartFormDataContent();
+                formData.Headers.ContentType.MediaType = "multipart/form-data";
 
                 var filePath = Path.Combine(workingDirectory, "deliverables.pdf");
                 // Add other form fields
@@ -168,6 +170,7 @@ namespace Ark.Revit
                 formData.Add(fileContent, "file", doc.Title + ".pdf");
 
                 // Send the request
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
                 var response = await httpClient.PostAsync(url, formData);
 
                 // Read the response

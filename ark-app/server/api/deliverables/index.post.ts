@@ -7,9 +7,9 @@ export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event);
 
   console.log("formData", formData);
-  const file = formData?.find((item) => item.name === "file");
+  const file = formData![0];
 
-  if (!file) return;
+  if (!file) return "no file found";
 
   const id = uuid();
   const fileName = file.filename || "deliverables";
@@ -28,5 +28,5 @@ export default defineEventHandler(async (event) => {
     })
     .returning();
 
-  return result[0];
+  return key;
 });
