@@ -13,7 +13,9 @@
     "@nuxt/ui": "^2.16.0",
     "axios": "^1.7.2",
     "compute-rhino3d": "^0.13.0-beta",
+    "drizzle-orm": "^0.31.2",
     "nuxt": "^3.11.2",
+    "postgres": "^3.4.4",
     "rhino3dm": "^8.6.1",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
