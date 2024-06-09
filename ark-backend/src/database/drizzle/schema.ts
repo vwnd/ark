@@ -21,7 +21,7 @@ export const projects = pgTable('projects', {
 });
 
 export const documents = pgTable('documents', {
-  id: uuid('id').defaultRandom(),
+  id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
   type: varchar('type').notNull(),
   projectId: integer('project_id')
