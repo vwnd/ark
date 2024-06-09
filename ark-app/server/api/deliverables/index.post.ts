@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   console.log("formData", formData);
   const file = formData![0];
 
-  if (!file) return;
+  if (!file) return "no file found";
 
   const id = uuid();
   const fileName = file.filename || "deliverables";
