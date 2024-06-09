@@ -10,6 +10,9 @@ using Speckle.Core.Helpers;
 using Speckle.Core.Logging;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 
 namespace Ark.Revit
 {
@@ -106,14 +109,14 @@ namespace Ark.Revit
 
             SendToSpeckle(rootCommitObject, modelDirectory);
 
-            var sent = SendDeliverables(doc);
+            var sent = SendDeliverables(doc).Result;
             if (sent)
             {
                 Console.WriteLine("Deliverables sent.");
             }
         }
 
-        private static bool SendDeliverables(Document doc)
+        private static async Task<bool> SendDeliverables(Document doc)
         {
             using (Transaction tx = new Transaction(doc))
             {
@@ -146,6 +149,42 @@ namespace Ark.Revit
                 Console.WriteLine($"Exporting ${sheetIds.Count} deliverables.");
 
                 doc.Export(workingDirectory, sheetIds.ToList(), options);
+
+                using (var httpClient = new HttpClient())
+                {
+                    var url = "https://ark-sable.vercel.app/api/deliverables";
+
+                    using (var multipartFormContent = new MultipartFormDataContent())
+                    {
+                        var filePath = Path.Combine(workingDirectory, "deliverables.pdf");
+                        // Add other form fields
+                        multipartFormContent.Add(new StringContent("value1"), "field1");
+                        multipartFormContent.Add(new StringContent("value2"), "field2");
+
+                        // Add the file content
+                        var fileStream = File.OpenRead(filePath);
+                        var fileContent = new StreamContent(fileStream);
+                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+                        multipartFormContent.Add(fileContent, "fileField", Path.GetFileName(filePath));
+
+                        // Send the request
+                        var response = await httpClient.PostAsync(url, multipartFormContent);
+
+                        // Read the response
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responseContent = await response.Content.ReadAsStringAsync();
+                            Console.WriteLine("Response: " + responseContent);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: " + response.StatusCode);
+                        }
+                    }
+                }
+
+
+
                 tx.RollBack();
             }
             return true;
