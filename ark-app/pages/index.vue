@@ -3,6 +3,22 @@ import axios from "axios";
 import { ref } from "vue";
 
 const pending = ref(false);
+const tableMode = ref("documents");
+
+const project = ref<string | null>("Bojka Tower");
+const fileName = ref<string>("No file selected");
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const { data: documents, refresh: refreshDocuments } =
+  useFetch("/api/documents");
+const { data: deliverables, refresh: refreshdeliverables } =
+  useFetch("/api/deliverables");
+
+const pickFile = () => {
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
+};
 
 async function upload(files: File[]) {
   pending.value = true;
@@ -12,41 +28,17 @@ async function upload(files: File[]) {
     const data = new FormData();
     data.append("file", file);
 
-    // const config = {
-    //   method: "post",
-    //   url: "http://10.120.3.191:3000/documents/upload",
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    //   data: data,
-    // };
-
     const response = await useFetch("/api/documents/upload", {
       method: "post",
       body: data,
       headers: { "cache-control": "no-cache" },
     });
 
-    console.log(response);
-    // await axios(config);
-
-    refresh();
+    refreshDocuments();
   }
 
   pending.value = false;
 }
-
-const { data: documents, refresh } = useFetch("/api/documents");
-
-const project = ref<string | null>("Bojka Tower");
-const fileName = ref<string>("No file selected");
-const fileInput = ref<HTMLInputElement | null>(null);
-
-const pickFile = () => {
-  if (fileInput.value) {
-    fileInput.value.click();
-  }
-};
 
 const handleFileChange = (event: Event) => {
   const input = event.target as HTMLInputElement;
@@ -61,6 +53,7 @@ const handleFileChange = (event: Event) => {
 <template>
   <div class="flex w-full justify-center">
     <div class="p-8 max-w-3xl space-y-2 w-full">
+      {{ deliverables }}
       <nav class="flex w-full items-center justify-between mb-8">
         <BaseLogo class="w-20 h-12" />
         <UAvatar
@@ -78,7 +71,7 @@ const handleFileChange = (event: Event) => {
         style="display: none"
       />
       <div class="flex h-8">
-        <BaseHorizontalNavigation />
+        <BaseHorizontalNavigation v-model="tableMode" />
         <UButton
           @click="pickFile()"
           icon="i-heroicons-arrow-down-tray"
