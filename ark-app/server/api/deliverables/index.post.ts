@@ -4,22 +4,18 @@ import { uploadFile } from "~/server/services/storage";
 import { v4 as uuid } from "uuid";
 
 export default defineEventHandler(async (event) => {
-  const formData = await readFormData(event);
+  const formData = await readMultipartFormData(event);
+
   console.log("formData", formData);
-  const file = formData.get("file");
+  const file = formData?.find((item) => item.name === "file");
 
-  if (!file || !(file instanceof File)) return;
-
-  const fileName = file.name;
-  const fileType = file.type;
+  if (!file) return;
 
   const id = uuid();
+  const fileName = file.filename || "deliverables";
+  const fileType = file.type!;
 
-  const key = await uploadFile(
-    Buffer.from(await file.arrayBuffer()),
-    `deliverables/${id}`,
-    fileType
-  );
+  const key = await uploadFile(file.data, `deliverables/${id}`, fileType);
 
   const result = await db
     .insert(deliverables)

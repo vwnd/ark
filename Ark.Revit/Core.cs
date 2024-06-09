@@ -10,10 +10,7 @@ using Speckle.Core.Helpers;
 using Speckle.Core.Logging;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
-using Speckle.Newtonsoft.Json.Serialization;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Policy;
 
 namespace Ark.Revit
 {
@@ -148,51 +145,46 @@ namespace Ark.Revit
 
                 doc.Export(workingDirectory, sheetIds.ToList(), options);
 
-                using (var httpClient = new HttpClient())
+                var httpClient = new HttpClient();
+                var url = "https://ark-sable.vercel.app/api/deliverables";
+
+                var formData = new MultipartFormDataContent();
+
+                var filePath = Path.Combine(workingDirectory, "deliverables.pdf");
+                // Add other form fields
+
+                var fileExists = File.Exists(filePath);
+                if (!fileExists)
                 {
-                    var url = "https://ark-sable.vercel.app/api/deliverables";
-
-                    using (var multipartFormContent = new MultipartFormDataContent())
-                    {
-                        var filePath = Path.Combine(workingDirectory, "deliverables.pdf");
-                        // Add other form fields
-
-                        var fileExists = File.Exists(filePath);
-                        if (!fileExists)
-                        {
-                            Console.WriteLine("File does not exist.");
-                            tx.RollBack();
-                            return false;
-                        }
-
-                        // Add the file content
-                        var fileStream = File.OpenRead(filePath);
-                        var fileContent = new StreamContent(fileStream);
-                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/pdf");
-                        multipartFormContent.Add(fileContent, "file", Path.GetFileName(filePath));
-
-                        // Send the request
-                        var response = await httpClient.PostAsync(url, multipartFormContent);
-
-                        // Read the response
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var responseContent = await response.Content.ReadAsStringAsync();
-                            Console.WriteLine("Response: " + responseContent);
-                            return true;
-                        }
-                        else
-                        {
-                            var errorContent = await response.Content.ReadAsStringAsync();
-                            Console.WriteLine("Error: " + response.StatusCode + " " + errorContent);
-                            return false;
-                        }
-                    }
+                    Console.WriteLine("File does not exist.");
+                    tx.RollBack();
+                    return false;
                 }
 
+                // Add the file content
+                var bytes = File.ReadAllBytes(filePath);
+                Console.WriteLine($"File size: {bytes.Length} bytes.");
+                var fileContent = new ByteArrayContent(bytes);
+                formData.Add(fileContent, "file", doc.Title + ".pdf");
 
+                // Send the request
+                var response = await httpClient.PostAsync(url, formData);
 
-                tx.RollBack();
+                // Read the response
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Response: " + responseContent);
+                    return true;
+                    tx.RollBack();  
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Error: " + response.StatusCode + " " + errorContent);
+                    return false;
+                    tx.RollBack();
+                }
             }
             return true;
         }
