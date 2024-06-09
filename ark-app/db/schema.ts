@@ -6,6 +6,7 @@ import {
   varchar,
   integer,
   uuid,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const migrations = pgTable("migrations", {
@@ -39,4 +40,5 @@ export const deliverables = pgTable("deliverables", {
   documentId: uuid("document_id")
     .notNull()
     .references(() => documents.id),
+  createdAt: timestamp("created_at").defaultNow(),
 });
