@@ -28,6 +28,7 @@ export const documents = pgTable("documents", {
     .notNull()
     .references(() => projects.id),
   urn: text("urn"),
+  status: varchar("status"),
 });
 
 export const deliverables = pgTable("deliverables", {

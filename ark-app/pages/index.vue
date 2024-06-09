@@ -1,18 +1,35 @@
 <script setup lang="ts">
-import axios from "axios";
 import { ref } from "vue";
+import type { Item } from "~/components/base/Table.vue";
+
+const { data: documents, refresh: refreshDocuments } = await useFetch(
+  "/api/documents"
+);
+const { data: deliverables, refresh: refreshdeliverables } =
+  useFetch("/api/deliverables");
 
 const pending = ref(false);
-const tableMode = ref("documents");
+const tableMode = ref(0);
+const data = ref<Item[]>(documents.value);
 
 const project = ref<string | null>("Bojka Tower");
 const fileName = ref<string>("No file selected");
 const fileInput = ref<HTMLInputElement | null>(null);
 
-const { data: documents, refresh: refreshDocuments } =
-  useFetch("/api/documents");
-const { data: deliverables, refresh: refreshdeliverables } =
-  useFetch("/api/deliverables");
+watchEffect(() => {
+  switch (tableMode.value) {
+    case 0:
+      if (documents.value && deliverables.value)
+        data.value = [...documents.value, ...deliverables.value];
+      break;
+    case 1:
+      if (documents.value) data.value = documents.value;
+      break;
+    case 2:
+      if (deliverables.value) data.value = deliverables.value;
+      break;
+  }
+});
 
 const pickFile = () => {
   if (fileInput.value) {
@@ -53,7 +70,6 @@ const handleFileChange = (event: Event) => {
 <template>
   <div class="flex w-full justify-center">
     <div class="p-8 max-w-3xl space-y-2 w-full">
-      {{ deliverables }}
       <nav class="flex w-full items-center justify-between mb-8">
         <BaseLogo class="w-20 h-12" />
         <UAvatar
@@ -63,15 +79,8 @@ const handleFileChange = (event: Event) => {
           :ui="{ placeholder: 'text-white' }"
         />
       </nav>
-      <BaseSelectMenu class="max-w-60" v-model="project" />
-      <input
-        type="file"
-        ref="fileInput"
-        @change="handleFileChange"
-        style="display: none"
-      />
-      <div class="flex h-8">
-        <BaseHorizontalNavigation v-model="tableMode" />
+      <div class="flex h-8 w-full justify-between">
+        <BaseSelectMenu class="max-w-60" v-model="project" />
         <UButton
           @click="pickFile()"
           icon="i-heroicons-arrow-down-tray"
@@ -82,12 +91,16 @@ const handleFileChange = (event: Event) => {
           :trailing="false"
         />
       </div>
-      <BaseTable
-        :data="documents"
-        @drop="upload"
-        v-model="pending"
-        class="pb-10"
+      <input
+        type="file"
+        ref="fileInput"
+        @change="handleFileChange"
+        style="display: none"
       />
+      <div>
+        <BaseTabs v-model="tableMode" />
+      </div>
+      <BaseTable :data="data" @drop="upload" v-model="pending" class="pb-10" />
       <div class="border rounded-lg">
         <iframe
           title="Speckle"
