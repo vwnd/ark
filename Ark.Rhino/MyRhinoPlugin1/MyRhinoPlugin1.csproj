@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Title>MyRhinoPlugin1</Title>
+    <RootNamespace>MyRhinoPlugin1</RootNamespace>
+    <AssemblyName>MyRhinoPlugin1</AssemblyName>
+    <ProjectGuid>{71EE9F62-E481-4B0C-8A8F-3B1A9ECE78DC}</ProjectGuid>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWPF>false</UseWPF>
+    <Version>1.0</Version>
+    <Authors>YourName</Authors>
+    <Company>YourCompany</Company>
+    <Description>Description of MyRhinoPlugin1</Description>
+    <TargetExt>.rhp</TargetExt>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+
+  <!-- Build configurations -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>portable</DebugType>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RhinoCommon" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
+    <PackageReference Include="RhinoWindows" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
+    <PackageReference Include="Speckle.Core" Version="2.19.1" />
+    <PackageReference Include="Speckle.Objects.Converter.Rhino8" Version="2.19.1" />
+  </ItemGroup>
+
+
+</Project>

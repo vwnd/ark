@@ -1,0 +1,13 @@
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\bin\Debug\net7.0-windows\MyRhinoPlugin1.deps.json
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\bin\Debug\net7.0-windows\MyRhinoPlugin1.rhp
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\bin\Debug\net7.0-windows\MyRhinoPlugin1.pdb
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.csproj.AssemblyReference.cache
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\Sentry.Attributes.cs
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.AssemblyInfoInputs.cache
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.AssemblyInfo.cs
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.csproj.CoreCompileInputs.cache
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.rhp
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\refint\MyRhinoPlugin1.rhp
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\MyRhinoPlugin1.pdb
+C:\Users\bobad\Downloads\MyRhinoPlugin1 1\MyRhinoPlugin1\MyRhinoPlugin1\obj\Debug\net7.0-windows\ref\MyRhinoPlugin1.rhp

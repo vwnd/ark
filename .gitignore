@@ -11,3 +11,5 @@
 /Ark.Revit/Ark.Revit.bundle/Contents/*
 !/Ark.Revit/Ark.Revit.bundle/Contents/Ark.addin
 
+/Ark.Rhino/.vs
+/Ark.Rhino/MyRhinoPlugin1/bin/**
