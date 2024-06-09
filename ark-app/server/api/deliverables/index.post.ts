@@ -1,10 +1,11 @@
 import { db } from "~/db/drizzle";
-import { deliverables, documents } from "~/db/schema";
+import { deliverables } from "~/db/schema";
 import { uploadFile } from "~/server/services/storage";
 import { v4 as uuid } from "uuid";
 
 export default defineEventHandler(async (event) => {
   const formData = await readFormData(event);
+  console.log("formData", formData);
   const file = formData.get("file");
 
   if (!file || !(file instanceof File)) return;
