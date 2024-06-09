@@ -21,7 +21,7 @@ async function triggerRevitJob(urn: string) {
 }
 
 async function triggerRhinoJob(file: File) {
-  const url = "http://localhost:6500/";
+  const url = process.env.RHINO_COMPUTE_HOST || "http://localhost:6500/";
 
   const version = "8.0";
   const endpoint = "speckle-converter/converttospeckle-string";
