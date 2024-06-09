@@ -4,8 +4,7 @@ import { ref } from "vue";
 const emits = defineEmits(["drop"]);
 const pending = defineModel();
 
-// Define interfaces
-interface Document {
+export interface Item {
   id: string;
   name: string;
   type: string;
@@ -44,8 +43,8 @@ const columns: Column[] = [
   },
 
   {
-    key: "urn",
-    label: "URN",
+    key: "status",
+    label: "Status",
   },
 ];
 
@@ -102,6 +101,14 @@ const handleDrop = async (event: DragEvent) => {
         :sort="sort"
         class="h-80"
       >
+        <template #status-data="{ row }">
+          <template v-if="row.status === 'done'"
+            ><div class="w-3 h-3 bg-green-400 rounded-full" />
+          </template>
+          <template v-else-if="row.status === 'progress'"
+            ><div class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"
+          /></template>
+        </template>
         <template #loading-state>
           <div class="flex items-center justify-center h-32">
             <i class="loader --6" />
