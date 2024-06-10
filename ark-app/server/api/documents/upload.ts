@@ -22,6 +22,7 @@ async function triggerRevitJob(urn: string) {
 
 async function triggerRhinoJob(file: File) {
   const url = process.env.RHINO_COMPUTE_HOST || "http://localhost:6500/";
+  const apiKey = process.env.RHINO_COMPUTE_KEY || "";
 
   const version = "8.0";
   const endpoint = "speckle-converter/converttospeckle-string";
@@ -38,7 +39,10 @@ async function triggerRhinoJob(file: File) {
     let request = {
       method: "POST",
       body: JSON.stringify(arglist),
-      headers: { "User-Agent": `compute.rhino3d.js/${version}` },
+      headers: {
+        "User-Agent": `compute.rhino3d.js/${version}`,
+        RhinoComputeKey: apiKey,
+      },
     };
 
     let p = fetch(url + endpoint, request);
