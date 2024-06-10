@@ -60,6 +60,9 @@ export default defineEventHandler(async (event) => {
 
   const file = formData.get("file") as File;
 
+  //if more than 50mb throw error
+  if (file.size > 50 * 1024 * 1024) throw new Error("File too large");
+
   const extension = file.name.slice(file.name.lastIndexOf(".") + 1);
 
   if (!extension || !["rvt", "3dm"].includes(extension))
