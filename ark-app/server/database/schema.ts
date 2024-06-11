@@ -34,11 +34,19 @@ export const documents = pgTable("documents", {
 
 export const deliverables = pgTable("deliverables", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull(),
+  name: varchar("name").notNull(),
   type: varchar("type").notNull(),
   key: text("key").notNull(),
   documentId: uuid("document_id")
     .notNull()
     .references(() => documents.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull(),
+  name: text("name").notNull(),
+  avatar: text("avatar"),
   createdAt: timestamp("created_at").defaultNow(),
 });
