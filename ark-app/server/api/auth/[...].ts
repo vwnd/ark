@@ -24,4 +24,7 @@ export default NuxtAuthHandler({
       return true;
     },
   },
+  pages: {
+    signIn: "/login",
+  },
 });

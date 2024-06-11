@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     provider: {
       type: "authjs",
     },
+    globalAppMiddleware: {
+      isEnabled: true,
+    },
   },
   colorMode: {
     preference: "light",

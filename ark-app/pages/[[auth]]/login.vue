@@ -58,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ auth: false });
 const { signIn, data, status } = useAuth();
 
 if (status.value === "authenticated") {
