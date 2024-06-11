@@ -1,5 +1,8 @@
 import { NuxtAuthHandler } from "#auth";
+import { eq } from "drizzle-orm";
 import GoogleProvider from "next-auth/providers/google";
+import { db } from "~/server/database/drizzle";
+import { users } from "~/server/database/schema";
 
 if (
   !process.env.GOOGLE_OAUTH_CLIENT_ID ||
@@ -19,8 +22,22 @@ export default NuxtAuthHandler({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("signIn", { user, account, profile, email, credentials });
+    async signIn({ user }) {
+      const { email, name, image: avatar } = user;
+
+      if (!email || !name || !avatar) {
+        console.error("Not enough information to authenticate user", user);
+        return false;
+      }
+
+      const existingUser = await db.query.users.findFirst({
+        where: (user, { eq }) => eq(user.email, user.email),
+      });
+
+      if (!existingUser) {
+        await db.insert(users).values({ email, name, avatar });
+      }
+
       return true;
     },
   },
