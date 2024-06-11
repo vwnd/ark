@@ -66,6 +66,12 @@ const handleFileChange = (event: Event) => {
     fileName.value = "No file selected";
   }
 };
+
+const userName = ref<string | null>(null);
+const { status: authStatus, data: authData } = useAuth();
+if (authStatus.value === "authenticated" && authData.value?.user?.name) {
+  userName.value = authData.value.user.name;
+}
 </script>
 
 <template>
@@ -74,7 +80,8 @@ const handleFileChange = (event: Event) => {
       <nav class="flex w-full items-center justify-between mb-8">
         <BaseLogo class="w-20 h-12" />
         <UAvatar
-          alt="D B"
+          v-if="userName"
+          :alt="userName"
           class="bg-red-400"
           size="sm"
           :ui="{ placeholder: 'text-white' }"
