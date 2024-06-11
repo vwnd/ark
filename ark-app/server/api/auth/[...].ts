@@ -1,5 +1,4 @@
 import { NuxtAuthHandler } from "#auth";
-import { eq } from "drizzle-orm";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "~/server/database/drizzle";
 import { users } from "~/server/database/schema";

@@ -58,12 +58,14 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth: false });
-const { signIn, data, status } = useAuth();
+definePageMeta({
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: "/",
+  },
+});
 
-if (status.value === "authenticated") {
-  navigateTo("/");
-}
+const { signIn, data, status } = useAuth();
 
 async function signInWithGoogle() {
   signIn("google");
