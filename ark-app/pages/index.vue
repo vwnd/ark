@@ -92,7 +92,7 @@ const items = [
     <div class="p-8 max-w-3xl space-y-2 w-full">
       <nav class="flex w-full items-center justify-between mb-8">
         <BaseLogo class="w-20 h-12" />
-        <UDropdown :items="items">
+        <UDropdown v-if="authData?.user" :items="items">
           <UAvatar
             v-if="userName"
             :alt="userName"
