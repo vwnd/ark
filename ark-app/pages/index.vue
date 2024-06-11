@@ -72,7 +72,7 @@ if (authStatus.value === "authenticated" && authData.value?.user?.name) {
   userName.value = authData.value.user.name;
 }
 
-const { signOut } = useAuth();
+const { signOut, data: userData } = useAuth();
 
 const items = [
   [
@@ -95,6 +95,7 @@ const items = [
         <UDropdown v-if="authData?.user" :items="items">
           <UAvatar
             v-if="userName"
+            :src="userData?.user?.image || undefined"
             :alt="userName"
             class="bg-red-400"
             size="sm"
