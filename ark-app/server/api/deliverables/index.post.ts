@@ -1,5 +1,5 @@
 import { db } from "~/db/drizzle";
-import { deliverables } from "~/db/schema";
+import { deliverables } from "~/server/database/schema";
 import { uploadFile } from "~/server/services/storage";
 import { v4 as uuid } from "uuid";
 
