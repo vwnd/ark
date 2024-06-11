@@ -2,6 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/ui", "@sidebase/nuxt-auth"],
+  auth: {
+    provider: {
+      type: "authjs",
+    },
+  },
   colorMode: {
     preference: "light",
   },
