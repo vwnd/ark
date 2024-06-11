@@ -4,9 +4,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({ auth: false });
-</script>
 <style>
 /* Global scrollbar styles */
 ::-webkit-scrollbar {
