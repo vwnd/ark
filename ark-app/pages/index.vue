@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Column } from "postgres";
 import { ref } from "vue";
 import type { Item } from "~/components/base/Table.vue";
 
@@ -72,6 +71,20 @@ const { status: authStatus, data: authData } = useAuth();
 if (authStatus.value === "authenticated" && authData.value?.user?.name) {
   userName.value = authData.value.user.name;
 }
+
+const { signOut } = useAuth();
+
+const items = [
+  [
+    {
+      label: "Sign Out",
+      icon: "i-heroicons-arrow-right-start-on-rectangle",
+      click: () => {
+        signOut();
+      },
+    },
+  ],
+];
 </script>
 
 <template>
@@ -79,13 +92,15 @@ if (authStatus.value === "authenticated" && authData.value?.user?.name) {
     <div class="p-8 max-w-3xl space-y-2 w-full">
       <nav class="flex w-full items-center justify-between mb-8">
         <BaseLogo class="w-20 h-12" />
-        <UAvatar
-          v-if="userName"
-          :alt="userName"
-          class="bg-red-400"
-          size="sm"
-          :ui="{ placeholder: 'text-white' }"
-        />
+        <UDropdown :items="items">
+          <UAvatar
+            v-if="userName"
+            :alt="userName"
+            class="bg-red-400"
+            size="sm"
+            :ui="{ placeholder: 'text-white' }"
+          />
+        </UDropdown>
       </nav>
       <div class="flex h-8 w-full justify-between">
         <BaseSelectMenu class="max-w-60" v-model="project" />
