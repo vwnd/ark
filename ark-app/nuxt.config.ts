@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     globalAppMiddleware: {
       isEnabled: true,
     },
+    baseURL: process.env.AUTH_ORIGIN,
   },
   colorMode: {
     preference: "light",
