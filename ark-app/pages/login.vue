@@ -51,7 +51,7 @@
     </div>
     <div class="hidden lg:block relative bg-red-400">
       <span class="h-full w-full object-cover m-auto">
-        <div class="flex items-center justify-center h-full"></div>
+        <img src="/hero.png" class="h-full w-full" />
       </span>
     </div>
   </div>
