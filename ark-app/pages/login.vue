@@ -22,7 +22,7 @@
               <UIcon name="i-fe-google" dynamic />
             </template>
           </UButton>
-          <UButton
+          <!-- <UButton
             size="md"
             color="primary"
             variant="outline"
@@ -45,7 +45,7 @@
             <template #leading>
               <UIcon name="i-fe-github" dynamic />
             </template>
-          </UButton>
+          </UButton> -->
         </div>
       </div>
     </div>
