@@ -4,5 +4,7 @@
 - [x] Integrate Google OAuth provider
 - [ ] Integrate GitHub OAuth provider
 - [ ] Integrate Microsoft OAuth provider
-- [ ] Create user in database on successful authentication
-- [ ] Implement user signOut logic
+- [x] Create user in database on successful authentication
+- [x] Implement user signOut logic
+- [ ] Authenticate user with Speckle
+- [ ] Add "createdBy" field to documents
