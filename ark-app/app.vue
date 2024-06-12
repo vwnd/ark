@@ -3,6 +3,7 @@
     <NuxtPage />
   </div>
 </template>
+
 <style>
 /* Global scrollbar styles */
 ::-webkit-scrollbar {

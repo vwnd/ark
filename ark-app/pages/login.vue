@@ -16,6 +16,7 @@
             label="Sign in with Google"
             block
             :trailing="false"
+            @click="signInWithGoogle"
           >
             <template #leading>
               <UIcon name="i-fe-google" dynamic />
@@ -56,6 +57,19 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: "/",
+  },
+});
+
+const { signIn, data, status } = useAuth();
+
+async function signInWithGoogle() {
+  signIn("google");
+}
+</script>
 
 <style scoped></style>
