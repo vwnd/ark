@@ -30,7 +30,7 @@ export const documents = pgTable("documents", {
     .references(() => projects.id),
   urn: text("urn"),
   status: varchar("status"),
-  version: integer("version").default(1),
+  version: integer("version").notNull().default(1),
   createdAt: timestamp("created_at").defaultNow(),
   createdBy: uuid("created_by")
     .notNull()

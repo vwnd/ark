@@ -72,6 +72,15 @@ export default defineEventHandler(async (event) => {
   if (!extension || !["rvt", "3dm"].includes(extension))
     throw new Error("Invalid file type");
 
+  const existingDocument = await db.query.documents.findFirst({
+    where: eq(documents.name, file.name),
+  });
+
+  let version = 1;
+  if (existingDocument) {
+    version = existingDocument.version + 1;
+  }
+
   const document = (
     await db
       .insert(documents)
@@ -80,6 +89,7 @@ export default defineEventHandler(async (event) => {
         name: file.name,
         type: extension,
         status: "progress",
+        version,
       })
       .returning()
   )[0];
