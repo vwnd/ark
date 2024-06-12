@@ -93,6 +93,7 @@ const items = (row) => [
     {
       label: "Delete",
       icon: "i-heroicons-trash-20-solid",
+      click: () => useFetch(`/api/documents/${row.id}`, { method: "delete" }),
     },
   ],
 ];
