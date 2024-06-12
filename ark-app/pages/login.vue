@@ -22,6 +22,19 @@
               <UIcon name="i-fe-google" dynamic />
             </template>
           </UButton>
+          <UButton
+            size="md"
+            color="primary"
+            variant="outline"
+            label="Sign in with GitHub"
+            block
+            :trailing="false"
+            @click="signInWithGithub"
+          >
+            <template #leading>
+              <UIcon name="i-fe-github" dynamic />
+            </template>
+          </UButton>
           <!-- <UButton
             size="md"
             color="primary"
@@ -33,19 +46,7 @@
             <template #leading>
               <UIcon name="i-gg-microsoft" dynamic />
             </template>
-          </UButton>
-          <UButton
-            size="md"
-            color="primary"
-            variant="outline"
-            label="Sign in with GitHub"
-            block
-            :trailing="false"
-          >
-            <template #leading>
-              <UIcon name="i-fe-github" dynamic />
-            </template>
-          </UButton> -->
+          </UButton>-->
         </div>
       </div>
     </div>
@@ -69,6 +70,10 @@ const { signIn, data, status } = useAuth();
 
 async function signInWithGoogle() {
   signIn("google");
+}
+
+async function signInWithGithub() {
+  signIn("github");
 }
 </script>
 

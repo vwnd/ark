@@ -1,14 +1,17 @@
 import { NuxtAuthHandler } from "#auth";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import { db } from "~/server/database/drizzle";
 import { users } from "~/server/database/schema";
 
 if (
   !process.env.GOOGLE_OAUTH_CLIENT_ID ||
-  !process.env.GOOGLE_OAUTH_CLIENT_SECRET
+  !process.env.GOOGLE_OAUTH_CLIENT_SECRET ||
+  !process.env.GITHUB_OAUTH_CLIENT_ID ||
+  !process.env.GITHUB_OAUTH_CLIENT_SECRET
 ) {
   throw new Error(
-    "Missing GOOGLE_OAUTH_CLIENT_ID or GOOGLE_OAUTH_CLIENT_SECRET environment variables"
+    "Missing OAuth providers configuration. Please check your environment variables."
   );
 }
 
@@ -19,6 +22,11 @@ export default NuxtAuthHandler({
     GoogleProvider.default({
       clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+    }),
+    // @ts-expect-error
+    GitHubProvider.default({
+      clientId: process.env.GITHUB_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
     }),
   ],
   callbacks: {
