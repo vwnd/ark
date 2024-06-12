@@ -13,7 +13,7 @@ if (
 }
 
 export default NuxtAuthHandler({
-  secret: process.env.NUXT_AUTH_SECRET,
+  secret: process.env.AUTH_SECRET || "my-auth-secret",
   providers: [
     // @ts-expect-error
     GoogleProvider.default({
