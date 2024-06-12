@@ -45,7 +45,7 @@ async function upload(files: File[]) {
     const data = new FormData();
     data.append("file", file);
 
-    const response = await useFetch("/api/documents/upload", {
+    const response = await useFetch("/api/documents", {
       method: "post",
       body: data,
       headers: { "cache-control": "no-cache" },
