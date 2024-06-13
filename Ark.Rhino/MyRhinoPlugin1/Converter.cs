@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Objects.Converter.RhinoGh;
 using Rhino;
 using Rhino.Commands;
@@ -24,6 +25,11 @@ namespace MyRhinoPlugin1
         {
             try
             {
+                // Parse inputs
+                var inputs = JsonConvert.DeserializeObject(data);
+
+                // Download the Rhino file from the blob storage
+
                 Console.WriteLine("Starting conversion to Speckle.");
 
                 // Decode the base64 string
