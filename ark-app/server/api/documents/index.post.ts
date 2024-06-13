@@ -87,7 +87,7 @@ export default defineEventHandler(async (event) => {
         speckle: {
           model: "ark/rhino",
           project: "f97a0b4c05",
-          token: process.env.SPECKLE_TOKEN || "",
+          token: process.env.SPECKLE_BOT_TOKEN || "",
         },
       });
     }
