@@ -1,11 +1,12 @@
 import { eq } from "drizzle-orm";
 import { documents } from "~/server/database/schema";
-import { uploadFile } from "~/server/services/storage";
+import { uploadFile, getSignedURL } from "~/server/lib/storage";
 import {
   revitToSpeckle,
   uploadFile as uploadFileToAPS,
 } from "~/server/services/aps";
 import { db } from "~/server/database/drizzle";
+import { rhinoToSpeckle } from "~/server/lib/rhino";
 
 async function uploadRhino(file: File, key: string) {
   const arrayBuffer = await file.arrayBuffer();
@@ -18,40 +19,6 @@ async function uploadRevit(file: File, key: string) {
 
 async function triggerRevitJob(urn: string) {
   return revitToSpeckle(urn);
-}
-
-async function triggerRhinoJob(file: File) {
-  const url = process.env.RHINO_COMPUTE_HOST || "http://localhost:6500/";
-  const apiKey = process.env.RHINO_COMPUTE_KEY || "";
-
-  const version = "8.0";
-  const endpoint = "speckle-converter/converttospeckle-string";
-
-  const arglist = [];
-
-  const filebase64 = await file.arrayBuffer().then((buffer) => {
-    return Buffer.from(buffer).toString("base64");
-  });
-
-  arglist.push(filebase64);
-
-  try {
-    let request = {
-      method: "POST",
-      body: JSON.stringify(arglist),
-      headers: {
-        "User-Agent": `compute.rhino3d.js/${version}`,
-        RhinoComputeKey: apiKey,
-      },
-    };
-
-    let p = fetch(url + endpoint, request);
-    const json = p.then((r) => r.json());
-
-    return json;
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 export default defineEventHandler(async (event) => {
@@ -109,7 +76,20 @@ export default defineEventHandler(async (event) => {
     if (extension === "rvt") {
       triggerRevitJob(urn);
     } else if (extension === "3dm") {
-      triggerRhinoJob(file);
+      const modelURL = await getSignedURL(urn);
+      rhinoToSpeckle({
+        ark: {
+          document: document.id,
+        },
+        rhino: {
+          model: modelURL,
+        },
+        speckle: {
+          model: "ark/rhino",
+          project: "f97a0b4c05",
+          token: process.env.SPECKLE_BOT_TOKEN || "",
+        },
+      });
     }
   }
 

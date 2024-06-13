@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Objects.Converter.RhinoGh;
 using Rhino;
 using Rhino.Commands;
@@ -13,6 +16,7 @@ using Rhino.Geometry;
 using Rhino.Runtime;
 using Speckle.Core.Api;
 using Speckle.Core.Credentials;
+using Speckle.Core.Kits;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
 
@@ -22,106 +26,122 @@ namespace MyRhinoPlugin1
     {
         public static string ConvertToSpeckle(string data)
         {
+            var log = new List<string>();
+
+            var tmpFilePath = Path.GetTempFileName() + ".3dm";
             try
             {
-                Console.WriteLine("Starting conversion to Speckle.");
+                // Parse inputs
+                var inputs = JObject.Parse(data);
+                var modelURL = inputs["rhino"]["model"].ToObject<string>();
+                var projectId = inputs["speckle"]["project"].ToObject<string>();
+                var branchName = inputs["speckle"]["model"].ToObject<string>();
+                var speckleToken = inputs["speckle"]["token"].ToObject<string>();
 
-                // Decode the base64 string
-                var decodedData = Convert.FromBase64String(data);
-                var openedDoc = File3dm.FromByteArray(decodedData);
+                log.Add("Parsed inputs.");
 
-                Console.WriteLine("DECODED DATA LENGTH "+decodedData.Length );
-                Console.WriteLine("Decoded base64 data.");
-                Console.WriteLine(openedDoc.Objects.Count);
+                // Download the Rhino model
+                try
+                {
+                    using HttpClient client = new HttpClient();
+                    var response = client.GetAsync(modelURL).Result;
+                    response.EnsureSuccessStatusCode();
 
-                // string filePath = @"N:\Denmark\ZCZ\Daniel_tu_byl\BrepModel-Fancy.3dm";
-                // Console.WriteLine($"Reading Rhino file from {filePath}.");
+                    using (FileStream fs = new FileStream(tmpFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        response.Content.CopyToAsync(fs).Wait();
+                    }
+                    log.Add("Downloaded the Rhino model.");
+                }
+                catch (System.Exception ex)
+                {
+                    log.Add($"Failed to download the Rhino model: {ex.Message}");
+                    return JsonConvert.SerializeObject(log);
+                }
 
-                // var openedDoc = File3dm.Read(filePath);
+                // Open the Rhino model
+                var openedDoc = File3dm.Read(tmpFilePath);
+
                 if (openedDoc == null)
                 {
-                    Console.WriteLine("Failed to open the Rhino file.");
-                    return "Failed to open the Rhino file.";
+                    log.Add("Failed to open the Rhino file.");
+                    return JsonConvert.SerializeObject(log);
                 }
 
-                Console.WriteLine("Successfully opened the Rhino file.");
-
+                // Create a new headless Rhino document
                 var headlessDoc = RhinoDoc.CreateHeadless(null);
-                Console.WriteLine("Created a headless Rhino document.");
-                Console.WriteLine("Count opened Doc: " + openedDoc.Objects.Count);
 
-                // Add objects to headless doc
+                log.Add("Objects in opened document: " + openedDoc.Objects.Count);
+
                 foreach (var obj in openedDoc.Objects)
                 {
-                    //add page views
-                    // var views = openedDoc.Views[0].
-                    // headlessDoc.Views.AddPageView(views[0]);
-                    // openedDoc.Views.AddPageView(obj.Geometry, "A4", "Layout", false, false);
-                    // Console.WriteLine(obj.Geometry.GetType());
-                    
-                    if (obj.Geometry is DetailView or ClippingPlaneSurface)
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        headlessDoc.Objects.Add(obj.Geometry);
-                    }
-                    catch (TargetInvocationException e)
-                    {
-                        Console.WriteLine(e);
-                    }
+                    headlessDoc.Objects.Add(obj.Geometry, obj.Attributes);
                 }
-                Console.WriteLine("Added objects to the headless Rhino document.");
+
+                log.Add($"Added {headlessDoc.Objects.Count} objects to the headless document.");
 
                 var converter = new ConverterRhinoGh();
                 converter.SetContextDocument(headlessDoc);
-                Console.WriteLine("Initialized the Speckle converter.");
 
-                // Convert all objects in the file to Speckle objects
-                var speckleObjects = new List<Base>();
+                log.Add("Created the converter, and set the context document.");
 
-                Console.WriteLine("Headless doc count: " + openedDoc.Objects.Count);
+                // var commitObject = converter.ConvertToSpeckle(headlessDoc) as Collection;
+                var commitObject = new Collection("Rhino Model", "model");
+
+                log.Add("Created the commit object.");
+
                 foreach (var obj in headlessDoc.Objects)
                 {
-                    var canConvert = converter.CanConvertToSpeckle(obj.Geometry);
-
-                    if (!canConvert) continue;
-
-                    var baseObj = converter.ConvertToSpeckle(obj.Geometry);
-                    speckleObjects.Add(baseObj);
+                    try
+                    {
+                        var canConvert = converter.CanConvertToSpeckle(obj);
+                        if (canConvert)
+                        {
+                            var converted = converter.ConvertToSpeckle(obj.Geometry);
+                            if (converted is not null)
+                                commitObject.elements.Add(converted as Base);
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        log.Add($"Failed to convert object: {ex.Message}");
+                        continue;
+                    }
                 }
 
-                Console.WriteLine("Converted objects to Speckle format.");
+                log.Add($"Converted {commitObject.elements.Count} the objects.");
 
-                var root = new Base { ["elements"] = speckleObjects };
-                Console.WriteLine(root.GetTotalChildrenCount());
-                Console.WriteLine("Created the root Speckle object.");
-
-                // Print layouts to PDF
-                PrintLayoutsToPdf(headlessDoc, @"C:\Temp\_ark");
-                
-                SendToSpeckle(root);
-                Console.WriteLine("Triggered Speckle object send.");
-
-
-                return "Success!";
+                // Send the commit object to Speckle
+                var commitId = SendToSpeckle(commitObject, projectId, speckleToken, branchName).Result;
+                log.Add(commitId);
+                return JsonConvert.SerializeObject(log);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error during conversion: {e.Message}");
-                throw;
+                log.Add($"Error during conversion: {e.Message}");
+                return JsonConvert.SerializeObject(log);
+            }
+            finally
+            {
+                // check if the file exists
+                if (File.Exists(tmpFilePath))
+                {
+                    // delete the file
+                    File.Delete(tmpFilePath);
+                }
             }
         }
 
-        private static async Task SendToSpeckle(Base rootCommitObject, string blobStorageFolder = null)
+        private static async Task<string> SendToSpeckle(
+            Base rootCommitObject,
+            string projectId,
+            string speckleToken,
+            string branchName,
+            string blobStorageFolder = null
+        )
         {
             var startSendTime = DateTime.Now;
             Console.WriteLine("SendToSpeckle started.");
-
-            string speckleToken = "c74ebb8c0ab257f27a148aada323541148fcd4e5ce";
-            string projectId = "f97a0b4c05";
-
             var account = new Account
             {
                 token = speckleToken,
@@ -136,21 +156,23 @@ namespace MyRhinoPlugin1
                 var objectId = await Operations.Send(rootCommitObject, new List<ITransport> { transport });
                 Console.WriteLine($"Sent commit object to Speckle with ID {objectId}.");
 
-                await client.CommitCreate(new CommitCreateInput()
+                var commitId = await client.CommitCreate(new CommitCreateInput()
                 {
                     streamId = projectId,
                     objectId = objectId,
-                    branchName = "rhino model",
+                    branchName = branchName,
                     message = "Hello from Ark!",
                     sourceApplication = "Ark.Rhino",
                     totalChildrenCount = (int)rootCommitObject.GetTotalChildrenCount()
                 });
 
                 Console.WriteLine($"Created commit in Speckle with ID {objectId}.");
+                return $"Created commit in Speckle with ID {commitId}.";
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error during Speckle send: {ex.Message}");
+                return $"Error during Speckle send: {ex.Message}";
             }
             finally
             {
@@ -165,7 +187,7 @@ namespace MyRhinoPlugin1
             {
                 return;
             }
- 
+
             foreach (string layoutName in layoutNames)
             {
                 string filename = Path.Combine(outputFolder, layoutName + ".pdf");
@@ -182,7 +204,7 @@ namespace MyRhinoPlugin1
                     return;
                 }
             }
- 
+
         }
     }
 }
