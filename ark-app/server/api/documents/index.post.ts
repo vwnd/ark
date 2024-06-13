@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { documents } from "~/server/database/schema";
-import { uploadFile } from "~/server/services/storage";
+import { uploadFile } from "~/server/lib/storage";
 import {
   revitToSpeckle,
   uploadFile as uploadFileToAPS,
