@@ -160,7 +160,7 @@ namespace MyRhinoPlugin1
                 {
                     streamId = projectId,
                     objectId = objectId,
-                    branchName = "rhino model",
+                    branchName = branchName,
                     message = "Hello from Ark!",
                     sourceApplication = "Ark.Rhino",
                     totalChildrenCount = (int)rootCommitObject.GetTotalChildrenCount()

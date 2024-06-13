@@ -37,12 +37,12 @@ export async function rhinoToSpeckle(options: RhinoToSpeckleOptions) {
       },
     };
 
-    // const response = await fetch(
-    //   url + "speckle-converter/converttospeckle-string",
-    //   request
-    // );
+    const response = await fetch(
+      url + "speckle-converter/converttospeckle-string",
+      request
+    );
 
-    // console.log(response.status);
+    console.log(response.status);
   } catch (error) {
     console.log(error);
   }
