@@ -3,6 +3,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import * as fs from "fs";
 import * as path from "path";
 import { pipeline } from "stream";
@@ -72,4 +73,12 @@ export async function downloadFile(urn: string, bucketName: string) {
     console.log(error);
     throw new Error("Could not download file");
   }
+}
+
+export async function getSignedURL(key: string) {
+  const command = new GetObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+  });
+  // getSignedUrl(s3Client);
 }
