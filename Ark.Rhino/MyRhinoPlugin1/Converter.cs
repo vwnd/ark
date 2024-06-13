@@ -44,13 +44,16 @@ namespace MyRhinoPlugin1
                     {
                         response.Content.CopyToAsync(fs).Wait();
                     }
+
                     return "Success!";
                 }
 
                 catch (System.Exception ex)
                 {
                     return ex.Message;
-                } finally {
+                }
+                finally
+                {
                     // check if the file exists
                     if (File.Exists(tmpFilePath)) {
                         // delete the file
@@ -71,6 +74,7 @@ namespace MyRhinoPlugin1
                 // Decode the base64 string
                 var decodedData = Convert.FromBase64String(data);
                 var openedDoc = File3dm.FromByteArray(decodedData);
+                
 
                 Console.WriteLine("DECODED DATA LENGTH "+decodedData.Length );
                 Console.WriteLine("Decoded base64 data.");
