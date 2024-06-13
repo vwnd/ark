@@ -80,5 +80,8 @@ export async function getSignedURL(key: string) {
     Bucket: bucketName,
     Key: key,
   });
-  // getSignedUrl(s3Client);
+
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+
+  return url;
 }
