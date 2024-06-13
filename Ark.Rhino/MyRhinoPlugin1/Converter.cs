@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Objects.Converter.RhinoGh;
 using Rhino;
 using Rhino.Commands;
@@ -26,7 +28,41 @@ namespace MyRhinoPlugin1
             try
             {
                 // Parse inputs
-                var inputs = JsonConvert.DeserializeObject(data);
+                var inputs = JObject.Parse(data);
+                var modelURL = inputs["rhino"]["model"].ToObject<string>();
+
+                var tmpFilePath = Path.GetTempFileName() + ".3dm";
+
+                using HttpClient client = new HttpClient();
+
+                try
+                {
+                    var response = client.GetAsync(modelURL).Result;
+                    response.EnsureSuccessStatusCode(); 
+
+                    using (FileStream fs = new FileStream(tmpFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        response.Content.CopyToAsync(fs).Wait();
+                    }
+                    return "Success!";
+                }
+
+                catch (System.Exception ex)
+                {
+                    return ex.Message;
+                } finally {
+                    // check if the file exists
+                    if (File.Exists(tmpFilePath)) {
+                        // delete the file
+                        File.Delete(tmpFilePath);
+                    }
+                }
+
+                if (modelURL == null)
+                {
+                    Console.WriteLine("No model URL provided.");
+                    return "No model URL provided.";
+                }
 
                 // Download the Rhino file from the blob storage
 
