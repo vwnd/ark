@@ -1,4 +1,5 @@
 import RhinoCompute from "compute-rhino3d";
+import axios from "axios";
 
 interface RhinoToSpeckleOptions {
   rhino: {
@@ -29,20 +30,32 @@ export async function rhinoToSpeckle(options: RhinoToSpeckleOptions) {
   console.log(args);
 
   try {
-    let request = {
-      method: "POST",
-      body: JSON.stringify(args),
-      headers: {
-        RhinoComputeKey: apiKey,
-      },
-    };
+    // const response = await $fetch(
+    //   url + "speckle-converter/converttospeckle-string",
+    //   {
+    //     method: "POST",
+    //     body: JSON.stringify(args),
+    //     headers: {
+    //       RhinoComputeKey: apiKey,
+    //     },
+    //   }
+    // );
 
-    const response = await fetch(
+    console.log(
+      "sending request",
+      url + "speckle-converter/converttospeckle-string"
+    );
+    const response = await axios.post(
       url + "speckle-converter/converttospeckle-string",
-      request
+      JSON.stringify(args),
+      {
+        headers: {
+          RhinoComputeKey: apiKey,
+        },
+      }
     );
 
-    console.log(response.status);
+    console.log(response.data);
   } catch (error) {
     console.log(error);
   }
