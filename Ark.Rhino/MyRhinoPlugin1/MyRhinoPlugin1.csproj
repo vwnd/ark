@@ -32,6 +32,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RhinoCommon" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
     <PackageReference Include="RhinoWindows" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
     <PackageReference Include="Speckle.Core" Version="2.19.1" />
