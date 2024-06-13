@@ -93,7 +93,11 @@ const items = (row) => [
     {
       label: "Delete",
       icon: "i-heroicons-trash-20-solid",
-      click: () => useFetch(`/api/documents/${row.id}`, { method: "delete" }),
+      click: async () => {
+        await useFetch(`/api/documents/${row.id}`, { method: "delete" });
+        await refreshNuxtData("/api/documents");
+        console.log("refreshed");
+      },
     },
   ],
 ];

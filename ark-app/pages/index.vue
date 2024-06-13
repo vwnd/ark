@@ -134,8 +134,8 @@ const items = [
       <div class="border rounded-lg">
         <iframe
           title="Speckle"
-          src="https://app.speckle.systems/projects/f97a0b4c05/models/3e6646ea69,e00437cc0d,ec537459b4#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%7D"
-          width="700"
+          src="https://app.speckle.systems/projects/f97a0b4c05/models/$ark#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%2C%22hideControls%22%3Atrue%7D"
+          width="100%"
           height="400"
           frameborder="0"
         ></iframe>

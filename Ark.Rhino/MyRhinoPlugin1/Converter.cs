@@ -71,12 +71,20 @@ namespace MyRhinoPlugin1
                 // Create a new headless Rhino document
                 var headlessDoc = RhinoDoc.CreateHeadless(null);
 
-                log.Add("Objects in opened document: " + openedDoc.Objects.Count);
+                headlessDoc.Import(tmpFilePath);
 
-                foreach (var obj in openedDoc.Objects)
-                {
-                    headlessDoc.Objects.Add(obj.Geometry, obj.Attributes);
-                }
+                // log.Add("Objects in opened document: " + openedDoc.Objects.Count);
+
+                // foreach (var obj in openedDoc.Objects)
+                // {
+                //     // if obj is of type detail view skip it
+                //     if (obj is DetailViewObject)
+                //     {
+                //         continue;
+                //     }
+
+                //     headlessDoc.Objects.Add(obj.Geometry, obj.Attributes);
+                // }
 
                 log.Add($"Added {headlessDoc.Objects.Count} objects to the headless document.");
 
