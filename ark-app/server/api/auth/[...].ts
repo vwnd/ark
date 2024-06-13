@@ -49,7 +49,7 @@ export default NuxtAuthHandler({
       return true;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
+  // pages: {
+  //   signIn: "/login",
+  // },
 });
