@@ -88,8 +88,8 @@ const items = [
 </script>
 
 <template>
-  <div class="flex w-full justify-center">
-    <div class="p-8 max-w-3xl space-y-2 w-full">
+  <div class="flex flex-col w-full min-h-screen">
+    <div class="flex-1 flex flex-col p-8 space-y-2 h-full">
       <nav class="flex w-full items-center justify-between mb-8">
         <BaseLogo class="w-20 h-12" />
         <UDropdown v-if="authData?.user" :items="items">
@@ -103,42 +103,45 @@ const items = [
           />
         </UDropdown>
       </nav>
-      <div class="flex h-8 w-full justify-between">
-        <BaseSelectMenu class="max-w-60" v-model="project" />
-        <UButton
-          @click="pickFile()"
-          icon="i-heroicons-arrow-down-tray"
-          size="sm"
-          color="primary"
-          variant="solid"
-          label="Upload"
-          :trailing="false"
-        />
-      </div>
-      <input
-        type="file"
-        ref="fileInput"
-        @change="handleFileChange"
-        style="display: none"
-      />
-      <div>
-        <BaseTabs v-model="tableMode" />
-      </div>
-      <BaseTable
-        :data="data"
-        @drop="upload"
-        :mode="tableMode"
-        v-model="pending"
-        class="pb-10"
-      />
-      <div class="border rounded-lg">
-        <iframe
-          title="Speckle"
-          src="https://app.speckle.systems/projects/f97a0b4c05/models/$ark#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%2C%22hideControls%22%3Atrue%7D"
-          width="100%"
-          height="400"
-          frameborder="0"
-        ></iframe>
+      <div class="lg:grid lg:grid-cols-2 gap-8 flex-1">
+        <div class="flex flex-col space-y-4">
+          <div class="flex h-8 w-full justify-between">
+            <BaseSelectMenu class="max-w-60" v-model="project" />
+            <UButton
+              @click="pickFile()"
+              icon="i-heroicons-arrow-down-tray"
+              size="sm"
+              color="primary"
+              variant="solid"
+              label="Upload"
+              :trailing="false"
+            />
+            <input
+              type="file"
+              ref="fileInput"
+              @change="handleFileChange"
+              style="display: none"
+            />
+          </div>
+          <BaseTabs v-model="tableMode" />
+          <div class="h-full">
+            <BaseTable
+              :data="data"
+              @drop="upload"
+              :mode="tableMode"
+              v-model="pending"
+              class=""
+            />
+          </div>
+        </div>
+        <div class="border rounded-lg mt-8 lg:mt-0 h-[400px] lg:h-full">
+          <iframe
+            title="Speckle"
+            src="https://app.speckle.systems/projects/f97a0b4c05/models/$ark#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%2C%22hideControls%22%3Atrue%7D"
+            frameborder="0"
+            class="h-full w-full"
+          ></iframe>
+        </div>
       </div>
     </div>
   </div>
