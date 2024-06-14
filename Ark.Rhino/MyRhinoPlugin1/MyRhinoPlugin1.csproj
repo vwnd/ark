@@ -31,13 +31,22 @@
     
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TRACE;RHINO8;RHINO6_OR_GREATER;RHINO7_OR_GREATER;RHINO8_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="8.3.24009.15001" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RhinoCommon" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
-    <PackageReference Include="RhinoWindows" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
+    <PackageReference Include="RhinoCommon" Version="8.3.24009.15001" />
     <PackageReference Include="Speckle.Core" Version="2.19.1" />
-    <PackageReference Include="Speckle.Objects.Converter.Rhino8" Version="2.19.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhino8\ConverterRhino8.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.projitems" Label="Shared" />
 
 
 </Project>
