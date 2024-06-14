@@ -16,8 +16,8 @@ const columns = ref<Column[]>([
     label: "Type",
   },
   {
-    key: "status",
-    label: "Status",
+    key: "user.name",
+    label: "Published By",
   },
   {
     key: "actions",
@@ -95,8 +95,7 @@ const items = (row) => [
       icon: "i-heroicons-trash-20-solid",
       click: async () => {
         await useFetch(`/api/documents/${row.id}`, { method: "delete" });
-        await refreshNuxtData("/api/documents");
-        console.log("refreshed");
+        await refreshNuxtData();
       },
     },
   ],
@@ -173,6 +172,16 @@ const handleDrop = async (event: DragEvent) => {
               icon="i-heroicons-ellipsis-horizontal-20-solid"
             />
           </UDropdown>
+        </template>
+
+        <template #user.name-data="{ row }">
+          <UAvatar
+            :src="row.user.avatar"
+            :alt="row.user.name"
+            size="sm"
+            class="bg-red-400"
+            :ui="{ placeholder: 'text-white' }"
+          />
         </template>
       </UTable>
     </div>

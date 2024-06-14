@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   bigint,
   pgTable,
@@ -56,3 +57,30 @@ export const users = pgTable("users", {
   avatar: text("avatar"),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export const documentsRelations = relations(documents, ({ one, many }) => ({
+  project: one(projects, {
+    fields: [documents.projectId],
+    references: [projects.id],
+  }),
+  user: one(users, {
+    fields: [documents.createdBy],
+    references: [users.id],
+  }),
+  deliverables: many(deliverables),
+}));
+
+export const projectsRelations = relations(projects, ({ many }) => ({
+  documents: many(documents),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  documents: many(documents),
+}));
+
+export const deliverablesRelations = relations(deliverables, ({ one }) => ({
+  document: one(documents, {
+    fields: [deliverables.documentId],
+    references: [documents.id],
+  }),
+}));

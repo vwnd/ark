@@ -1,4 +1,4 @@
-import { pgTable, serial, text, foreignKey, uuid, varchar, integer, bigint, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, serial, text, bigint, varchar, foreignKey, uuid, integer, timestamp } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 
@@ -8,6 +8,13 @@ export const projects = pgTable("projects", {
 	speckle_id: text("speckle_id").notNull(),
 });
 
+export const migrations = pgTable("migrations", {
+	id: serial("id").primaryKey().notNull(),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	timestamp: bigint("timestamp", { mode: "number" }).notNull(),
+	name: varchar("name").notNull(),
+});
+
 export const documents = pgTable("documents", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
 	name: text("name").notNull(),
@@ -15,13 +22,9 @@ export const documents = pgTable("documents", {
 	project_id: integer("project_id").notNull().references(() => projects.id),
 	urn: text("urn"),
 	status: varchar("status"),
-});
-
-export const migrations = pgTable("migrations", {
-	id: serial("id").primaryKey().notNull(),
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	timestamp: bigint("timestamp", { mode: "number" }).notNull(),
-	name: varchar("name").notNull(),
+	version: integer("version").default(1).notNull(),
+	created_at: timestamp("created_at", { mode: 'string' }).defaultNow(),
+	created_by: uuid("created_by").default(sql`'69374353-86db-4ca4-bc6c-348c96707b2e'`).notNull().references(() => users.id),
 });
 
 export const deliverables = pgTable("deliverables", {
