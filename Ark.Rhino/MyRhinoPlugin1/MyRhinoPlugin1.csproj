@@ -36,7 +36,10 @@
     <PackageReference Include="RhinoCommon" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
     <PackageReference Include="RhinoWindows" Version="8.3.24009.15001" IncludeAssets="compile; build" PrivateAssets="all" />
     <PackageReference Include="Speckle.Core" Version="2.19.1" />
-    <PackageReference Include="Speckle.Objects.Converter.Rhino8" Version="2.19.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhino8\ConverterRhino8.csproj" />
   </ItemGroup>
 
 

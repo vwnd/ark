@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRhinoPlugin1", "MyRhinoPlugin1\MyRhinoPlugin1.csproj", "{1D2AD877-38D7-4BB2-9F24-FC78F3DCC742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyRhinoPlugin1", "MyRhinoPlugin1\MyRhinoPlugin1.csproj", "{71EE9F62-E481-4B0C-8A8F-3B1A9ECE78DC}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ConverterRhinoGhShared", "..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.shproj", "{B74CB8C1-187B-46A6-B20B-92B8C129F3EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterRhino8", "..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhino8\ConverterRhino8.csproj", "{8929A52E-EC3E-4154-8660-2DE08B12CF42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1D2AD877-38D7-4BB2-9F24-FC78F3DCC742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D2AD877-38D7-4BB2-9F24-FC78F3DCC742}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D2AD877-38D7-4BB2-9F24-FC78F3DCC742}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D2AD877-38D7-4BB2-9F24-FC78F3DCC742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71EE9F62-E481-4B0C-8A8F-3B1A9ECE78DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71EE9F62-E481-4B0C-8A8F-3B1A9ECE78DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71EE9F62-E481-4B0C-8A8F-3B1A9ECE78DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71EE9F62-E481-4B0C-8A8F-3B1A9ECE78DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8929A52E-EC3E-4154-8660-2DE08B12CF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8929A52E-EC3E-4154-8660-2DE08B12CF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8929A52E-EC3E-4154-8660-2DE08B12CF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8929A52E-EC3E-4154-8660-2DE08B12CF42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A9782BB-C340-44CD-AE24-E2E5AFE3DB2D}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.projitems*{8929a52e-ec3e-4154-8660-2de08b12cf42}*SharedItemsImports = 5
+		..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.projitems*{b74cb8c1-187b-46a6-b20b-92b8c129f3ee}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
