@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Converter.RhinoGh;
 using Rhino;
-using Rhino.Commands;
-using Rhino.DocObjects;
-using Rhino.FileIO;
-using Rhino.Geometry;
-using Rhino.Runtime;
 using Speckle.Core.Api;
 using Speckle.Core.Credentials;
-using Speckle.Core.Kits;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
 
@@ -59,32 +52,19 @@ namespace MyRhinoPlugin1
                     return JsonConvert.SerializeObject(log);
                 }
 
-                // Open the Rhino model
-                var openedDoc = File3dm.Read(tmpFilePath);
-
-                if (openedDoc == null)
-                {
-                    log.Add("Failed to open the Rhino file.");
-                    return JsonConvert.SerializeObject(log);
-                }
-
                 // Create a new headless Rhino document
                 var headlessDoc = RhinoDoc.CreateHeadless(null);
 
                 headlessDoc.Import(tmpFilePath);
 
-                // log.Add("Objects in opened document: " + openedDoc.Objects.Count);
+                var materials = headlessDoc.Materials;
 
-                // foreach (var obj in openedDoc.Objects)
-                // {
-                //     // if obj is of type detail view skip it
-                //     if (obj is DetailViewObject)
-                //     {
-                //         continue;
-                //     }
-
-                //     headlessDoc.Objects.Add(obj.Geometry, obj.Attributes);
-                // }
+                var rms = new List<string>();
+                foreach (var mat in materials)
+                {
+                    var rm = Rhino.Render.RenderMaterial.FromMaterial(mat, headlessDoc);
+                    rms.Add(rm.Id.ToString());
+                }
 
                 log.Add($"Added {headlessDoc.Objects.Count} objects to the headless document.");
 
@@ -105,7 +85,7 @@ namespace MyRhinoPlugin1
                         var canConvert = converter.CanConvertToSpeckle(obj);
                         if (canConvert)
                         {
-                            var converted = converter.ConvertToSpeckle(obj.Geometry);
+                            var converted = converter.ConvertToSpeckle(obj);
                             if (converted is not null)
                                 commitObject.elements.Add(converted as Base);
                         }

@@ -31,6 +31,7 @@ Global
 		SolutionGuid = {2A9782BB-C340-44CD-AE24-E2E5AFE3DB2D}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.projitems*{71ee9f62-e481-4b0c-8a8f-3b1a9ece78dc}*SharedItemsImports = 5
 		..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.projitems*{8929a52e-ec3e-4154-8660-2de08b12cf42}*SharedItemsImports = 5
 		..\..\speckle-sharp\Objects\Converters\ConverterRhinoGh\ConverterRhinoGhShared\ConverterRhinoGhShared.projitems*{b74cb8c1-187b-46a6-b20b-92b8c129f3ee}*SharedItemsImports = 13
 	EndGlobalSection
