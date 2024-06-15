@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import { db } from "~/server/database/drizzle";
 import { users } from "~/server/database/schema";
+import { eq } from "drizzle-orm";
 
 if (
   !process.env.GOOGLE_OAUTH_CLIENT_ID ||
@@ -47,6 +48,28 @@ export default NuxtAuthHandler({
       }
 
       return true;
+    },
+    jwt: async ({ token, user }) => {
+      console.log("JWT CALLBACK", user, token);
+      const userData =
+        user && user.email
+          ? await db.query.users.findFirst({
+              where: eq(users.email, user.email),
+            })
+          : null;
+
+      const isSignIn = user ? true : false;
+      if (isSignIn) {
+        token.jwt = user ? (user as any).access_token || "" : "";
+        token.id = userData ? userData.id || "" : "";
+        token.role = user ? (user as any).role || "" : "";
+      }
+      return Promise.resolve(token);
+    },
+    session: async ({ session, token }) => {
+      (session as any).role = token.role;
+      (session as any).uid = token.id;
+      return Promise.resolve(session);
     },
   },
   pages: {
