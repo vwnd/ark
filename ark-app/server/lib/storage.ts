@@ -75,11 +75,32 @@ export async function downloadFile(urn: string, bucketName: string) {
   }
 }
 
-export async function getSignedURL(key: string) {
-  const command = new GetObjectCommand({
-    Bucket: bucketName,
-    Key: key,
-  });
+export async function getSignedURL(
+  key: string,
+  operation: "get" | "put" = "get"
+) {
+  let command: GetObjectCommand | PutObjectCommand;
+
+  switch (operation) {
+    case "get":
+      command = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: key,
+      });
+      break;
+    case "put":
+      command = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: key,
+      });
+      break;
+    default:
+      command = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: key,
+      });
+      break;
+  }
 
   const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
