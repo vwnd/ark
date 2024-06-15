@@ -88,19 +88,7 @@ const items = [
 <template>
   <div class="flex flex-col w-full min-h-screen">
     <div class="flex-1 flex flex-col p-8 space-y-2 h-full">
-      <nav class="flex w-full items-center justify-between mb-8">
-        <BaseLogo class="w-20 h-12" />
-        <UDropdown v-if="authData?.user" :items="items">
-          <UAvatar
-            v-if="userName"
-            :src="authData?.user?.image || undefined"
-            :alt="userName"
-            class="bg-red-400"
-            size="sm"
-            :ui="{ placeholder: 'text-white' }"
-          />
-        </UDropdown>
-      </nav>
+      <AppHeader />
       <div class="lg:grid lg:grid-cols-2 gap-8 flex-1">
         <div class="flex flex-col space-y-4">
           <div class="flex h-8 w-full justify-between">
