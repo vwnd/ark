@@ -1,12 +1,11 @@
 import { eq } from "drizzle-orm";
 import { documents } from "~/server/database/schema";
-import { uploadFile, getSignedURL } from "~/server/lib/storage";
+import { uploadFile, getSignedURL, rhinoToSpeckle } from "~/server/lib/";
 import {
   revitToSpeckle,
   uploadFile as uploadFileToAPS,
 } from "~/server/services/aps";
 import { db } from "~/server/database/drizzle";
-import { rhinoToSpeckle } from "~/server/lib/rhino";
 
 async function uploadRhino(file: File, key: string) {
   const arrayBuffer = await file.arrayBuffer();
