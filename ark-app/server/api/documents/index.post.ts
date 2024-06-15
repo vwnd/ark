@@ -95,6 +95,6 @@ export default defineEventHandler(async (event) => {
 
   await db
     .update(documents)
-    .set({ status: "done" })
+    .set({ status: "pending" })
     .where(eq(documents.id, document.id));
 });

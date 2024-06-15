@@ -1,9 +1,7 @@
 import { NuxtAuthHandler } from "#auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-import { db } from "~/server/database/drizzle";
-import { users } from "~/server/database/schema";
-import { eq } from "drizzle-orm";
+import { createUser, getUserByEmail } from "~/server/lib";
 
 if (
   !process.env.GOOGLE_OAUTH_CLIENT_ID ||
@@ -39,24 +37,17 @@ export default NuxtAuthHandler({
         return false;
       }
 
-      const existingUser = await db.query.users.findFirst({
-        where: (user, { eq }) => eq(user.email, email),
-      });
+      const existingUser = await getUserByEmail(email);
 
       if (!existingUser) {
-        await db.insert(users).values({ email, name, avatar });
+        await createUser(email, name, avatar);
       }
 
       return true;
     },
     jwt: async ({ token, user }) => {
-      console.log("JWT CALLBACK", user, token);
       const userData =
-        user && user.email
-          ? await db.query.users.findFirst({
-              where: eq(users.email, user.email),
-            })
-          : null;
+        user && user.email ? await getUserByEmail(user.email) : null;
 
       const isSignIn = user ? true : false;
       if (isSignIn) {
