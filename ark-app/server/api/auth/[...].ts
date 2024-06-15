@@ -40,7 +40,7 @@ export default NuxtAuthHandler({
       }
 
       const existingUser = await db.query.users.findFirst({
-        where: (user, { eq }) => eq(user.email, user.email),
+        where: (user, { eq }) => eq(user.email, email),
       });
 
       if (!existingUser) {
