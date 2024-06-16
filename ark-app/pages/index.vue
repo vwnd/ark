@@ -65,70 +65,50 @@ const handleFileChange = (event: Event) => {
     fileName.value = "No file selected";
   }
 };
-
-const userName = ref<string | null>(null);
-const { status: authStatus, data: authData, signOut } = useAuth();
-if (authStatus.value === "authenticated" && authData.value?.user?.name) {
-  userName.value = authData.value.user.name;
-}
-
-const items = [
-  [
-    {
-      label: "Sign Out",
-      icon: "i-heroicons-arrow-right-start-on-rectangle",
-      click: () => {
-        signOut();
-      },
-    },
-  ],
-];
 </script>
 
 <template>
-  <div class="flex flex-col w-full min-h-screen">
-    <div class="flex-1 flex flex-col p-8 space-y-2 h-full">
-      <AppHeader />
-      <div class="lg:grid lg:grid-cols-2 gap-8 flex-1">
-        <div class="flex flex-col space-y-4">
-          <div class="flex h-8 w-full justify-between">
-            <BaseSelectMenu class="max-w-60" v-model="project" />
-            <UButton
-              @click="pickFile()"
-              icon="i-heroicons-arrow-down-tray"
-              size="sm"
-              color="primary"
-              variant="solid"
-              label="Upload"
-              :trailing="false"
-            />
-            <input
-              type="file"
-              ref="fileInput"
-              @change="handleFileChange"
-              style="display: none"
-            />
-          </div>
-          <BaseTabs v-model="tableMode" />
-          <div class="h-full">
-            <BaseTable
-              :data="data"
-              @drop="upload"
-              :mode="tableMode"
-              v-model="pending"
-              class=""
-            />
-          </div>
+  <div class="flex flex-col px-8 py-6 space-y-2 min-h-screen max-w-7xl mx-auto">
+    <AppHeader />
+    <main class="lg:grid lg:grid-cols-2 gap-8 flex-1">
+      <div class="flex flex-col space-y-4">
+        <div class="flex h-8 w-full justify-between">
+          <BaseSelectMenu class="max-w-60" v-model="project" />
+          <UButton
+            @click="pickFile()"
+            icon="i-heroicons-arrow-down-tray"
+            size="sm"
+            color="primary"
+            variant="solid"
+            label="Upload"
+            :trailing="false"
+          />
+          <input
+            type="file"
+            ref="fileInput"
+            @change="handleFileChange"
+            style="display: none"
+          />
         </div>
-        <div class="border rounded-lg mt-8 lg:mt-0 h-[400px] lg:h-full">
-          <iframe
-            title="Speckle"
-            src="https://app.speckle.systems/projects/f97a0b4c05/models/$ark#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%2C%22hideControls%22%3Atrue%7D"
-            frameborder="0"
-            class="h-full w-full"
-          ></iframe>
+        <BaseTabs v-model="tableMode" />
+        <div class="h-full">
+          <BaseTable
+            :data="data"
+            @drop="upload"
+            :mode="tableMode"
+            v-model="pending"
+            class=""
+          />
         </div>
       </div>
-    </div>
+      <div class="border rounded-lg mt-8 lg:mt-0 h-[400px] lg:h-full">
+        <iframe
+          title="Speckle"
+          src="https://app.speckle.systems/projects/f97a0b4c05/models/$ark#embed=%7B%22isEnabled%22%3Atrue%2C%22isTransparent%22%3Atrue%2C%22hideControls%22%3Atrue%7D"
+          frameborder="0"
+          class="h-full w-full"
+        ></iframe>
+      </div>
+    </main>
   </div>
 </template>
