@@ -1,4 +1,6 @@
-# Todo
+# Ark
+
+### Todo
 
 - [x] Implement user signIn logic
 - [x] Integrate Google OAuth provider
@@ -14,5 +16,6 @@
 - [ ] Authenticate user with Speckle
 - [ ] Use AWS S3 for Revit job arguments instead of OSS
 - [ ] Add inputs.json as arguments to Revit job.
-- [ ] Geometry from Rhno with materials
+- [x] Geometry from Rhino with materials
 - [ ] Only owner of document can delete it
+- [ ] Wrap other formats (obj, dwg...) with RhinoCompute
