@@ -6,8 +6,10 @@ import {
   rhinoToSpeckle,
   uploadFileToAPS,
   revitToSpeckle,
+  createDocument,
 } from "~/server/lib/";
 import { db } from "~/server/database/drizzle";
+import { getServerSession } from "#auth";
 
 async function uploadRhino(file: File, key: string) {
   const arrayBuffer = await file.arrayBuffer();
@@ -23,6 +25,17 @@ async function triggerRevitJob(urn: string) {
 }
 
 export default defineEventHandler(async (event) => {
+  const session = await getServerSession(event);
+
+  if (!session || !session.user) {
+    return createError({
+      statusCode: 401,
+      message: "Unauthorized.",
+    });
+  }
+
+  const userId = session.uid;
+
   // handle upload
   // fixed projecid
   const projectId = 1;
@@ -35,37 +48,16 @@ export default defineEventHandler(async (event) => {
   //if more than 50mb throw error
   if (file.size > 50 * 1024 * 1024) throw new Error("File too large");
 
-  const extension = file.name.slice(file.name.lastIndexOf(".") + 1);
-
-  if (!extension || !["rvt", "3dm"].includes(extension))
-    throw new Error("Invalid file type");
-
-  const existingDocument = await db.query.documents.findFirst({
-    where: eq(documents.name, file.name),
+  const document = await createDocument({
+    name: file.name,
+    projectId,
+    createdBy: userId,
   });
 
-  let version = 1;
-  if (existingDocument) {
-    version = existingDocument.version + 1;
-  }
-
-  const document = (
-    await db
-      .insert(documents)
-      .values({
-        projectId,
-        name: file.name,
-        type: extension,
-        status: "progress",
-        version,
-      })
-      .returning()
-  )[0];
-
   let urn;
-  if (extension === "rvt") {
+  if (document.type === "rvt") {
     urn = await uploadRevit(file, `${projectId}/${document.id}`);
-  } else if (extension === "3dm") {
+  } else if (document.type === "3dm") {
     urn = await uploadRhino(file, `${projectId}/${document.id}`);
   }
 
@@ -74,9 +66,9 @@ export default defineEventHandler(async (event) => {
   await db.update(documents).set({ urn }).where(eq(documents.id, document.id));
 
   if (autoSync) {
-    if (extension === "rvt") {
+    if (document.type === "rvt") {
       triggerRevitJob(urn);
-    } else if (extension === "3dm") {
+    } else if (document.type === "3dm") {
       const modelURL = await getSignedURL(urn);
       rhinoToSpeckle({
         ark: {

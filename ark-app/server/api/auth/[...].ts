@@ -58,8 +58,8 @@ export default NuxtAuthHandler({
       return Promise.resolve(token);
     },
     session: async ({ session, token }) => {
-      (session as any).role = token.role;
-      (session as any).uid = token.id;
+      // (session as any).role = token.role;
+      session.uid = token.id as string;
       return Promise.resolve(session);
     },
   },
