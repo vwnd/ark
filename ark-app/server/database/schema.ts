@@ -56,6 +56,7 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   avatar: text("avatar"),
   createdAt: timestamp("created_at").defaultNow(),
+  role: text("role", { enum: ["admin", "user"] }).default("user"),
 });
 
 export const documentsRelations = relations(documents, ({ one, many }) => ({
