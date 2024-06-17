@@ -11,6 +11,7 @@ declare module "next-auth" {
       image?: string | null;
     };
     uid: string;
+    role: string;
     expires: ISODateString;
   }
 }
