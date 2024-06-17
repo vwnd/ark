@@ -53,12 +53,12 @@ export default NuxtAuthHandler({
       if (isSignIn) {
         token.jwt = user ? (user as any).access_token || "" : "";
         token.id = userData ? userData.id || "" : "";
-        token.role = user ? (user as any).role || "" : "";
+        token.role = userData ? userData.role || "" : "";
       }
       return Promise.resolve(token);
     },
     session: async ({ session, token }) => {
-      // (session as any).role = token.role;
+      session.role = token.role as string;
       session.uid = token.id as string;
       return Promise.resolve(session);
     },
