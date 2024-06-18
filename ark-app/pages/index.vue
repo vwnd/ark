@@ -40,6 +40,10 @@ const pickFile = () => {
 async function upload(files: File[]) {
   pending.value = true;
 
+  // 1. get signed url
+  // 2. upload file to signed url
+  // 3. create document
+
   if (files.length > 0) {
     const file = files[0];
     const data = new FormData();
