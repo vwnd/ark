@@ -52,7 +52,16 @@ async function upload(files: File[]) {
     const uploadUrl = data.value?.url;
     const key = data.value?.key;
 
-    console.log("uploadUrl", uploadUrl, key);
+    // 2. upload file to s3
+    const form = new FormData();
+    form.append("file", file);
+    await $fetch(uploadUrl!, {
+      method: "put",
+      body: form,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     // const data = new FormData();
     // data.append("file", file);
