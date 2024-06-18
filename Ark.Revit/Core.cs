@@ -198,7 +198,7 @@ namespace Ark.Revit
             Console.WriteLine("SendToSpeckle started");
             string speckleToken = "8575964fa83e5f7b08e9da82ceb428f4c6dfb1ee8a";
             string projectId = "f97a0b4c05";
-            string modelName = "structure";
+            string modelName = "ark/revit";
 
             var account = new Account()
             {
@@ -220,7 +220,7 @@ namespace Ark.Revit
             {
                 streamId = projectId,
                 objectId = objectId,
-                branchName = "structure",
+                branchName = modelName,
                 message = "Hello from Ark!",
                 sourceApplication = "Ark.Revit",
                 totalChildrenCount = (int)rootCommitObject.GetTotalChildrenCount()
