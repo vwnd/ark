@@ -42,13 +42,17 @@ async function upload(files: File[]) {
 
   if (files.length > 0) {
     const file = files[0];
+    const extension = file.name.split(".").pop();
 
     // 1. get signed url
-    const { data: uploadUrl } = useFetch("/api/documents/upload-url", {
-      query: { projectId: "1" },
+    const { data } = useFetch("/api/documents/upload-url", {
+      query: { projectId: 1, extension },
     });
 
-    console.log("uploadURL", uploadUrl.value);
+    const uploadUrl = data.value?.url;
+    const key = data.value?.key;
+
+    console.log("uploadUrl", uploadUrl, key);
 
     // const data = new FormData();
     // data.append("file", file);

@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "compute-rhino3d": "^0.13.0-beta",
     "drizzle-orm": "^0.31.2",
+    "h3-zod": "^0.5.3",
     "next-auth": "4.22.5",
     "nuxt": "^3.11.2",
     "postgres": "^3.4.4",
