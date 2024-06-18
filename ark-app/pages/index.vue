@@ -40,22 +40,26 @@ const pickFile = () => {
 async function upload(files: File[]) {
   pending.value = true;
 
-  // 1. get signed url
-  // 2. upload file to signed url
-  // 3. create document
-
   if (files.length > 0) {
     const file = files[0];
-    const data = new FormData();
-    data.append("file", file);
 
-    const response = await useFetch("/api/documents", {
-      method: "post",
-      body: data,
-      headers: { "cache-control": "no-cache" },
+    // 1. get signed url
+    const { data: uploadUrl } = useFetch("/api/documents/upload-url", {
+      query: { projectId: "1" },
     });
 
-    refreshDocuments();
+    console.log("uploadURL", uploadUrl.value);
+
+    // const data = new FormData();
+    // data.append("file", file);
+
+    // const response = await useFetch("/api/documents", {
+    //   method: "post",
+    //   body: data,
+    //   headers: { "cache-control": "no-cache" },
+    // });
+
+    // refreshDocuments();
   }
 
   pending.value = false;
