@@ -45,17 +45,21 @@ async function upload(files: File[]) {
     const extension = file.name.split(".").pop();
 
     // 1. get signed url
-    const { data } = useFetch("/api/documents/upload-url", {
+    const { data } = await useFetch("/api/documents/upload-url", {
       query: { projectId: 1, extension },
     });
+
+    console.log("data", data.value);
 
     const uploadUrl = data.value?.url;
     const key = data.value?.key;
 
+    console.log("uploadUrl", uploadUrl);
+
     // 2. upload file to s3
     const form = new FormData();
     form.append("file", file);
-    await $fetch(uploadUrl!, {
+    await useFetch(uploadUrl!, {
       method: "put",
       body: form,
       headers: {
@@ -63,7 +67,7 @@ async function upload(files: File[]) {
       },
     });
 
-    const response = await useFetch("/api/v2/documents", {
+    await useFetch("/api/documents/v2", {
       method: "post",
       body: {
         projectId: 1,
@@ -73,7 +77,8 @@ async function upload(files: File[]) {
       headers: { "cache-control": "no-cache" },
     });
 
-    refreshNuxtData("/api/documents");
+    // await refreshDocuments();
+    await refreshDocuments();
   }
 
   pending.value = false;

@@ -27,4 +27,6 @@ export default defineEventHandler(async (event) => {
     createdBy: session.uid,
     key,
   });
+
+  setResponseStatus(event, 201);
 });
