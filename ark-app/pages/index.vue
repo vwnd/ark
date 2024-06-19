@@ -63,16 +63,17 @@ async function upload(files: File[]) {
       },
     });
 
-    // const data = new FormData();
-    // data.append("file", file);
+    const response = await useFetch("/api/v2/documents", {
+      method: "post",
+      body: {
+        projectId: 1,
+        key,
+        name: file.name,
+      },
+      headers: { "cache-control": "no-cache" },
+    });
 
-    // const response = await useFetch("/api/documents", {
-    //   method: "post",
-    //   body: data,
-    //   headers: { "cache-control": "no-cache" },
-    // });
-
-    // refreshDocuments();
+    refreshNuxtData("/api/documents");
   }
 
   pending.value = false;
