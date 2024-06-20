@@ -6,7 +6,8 @@ type CreateDocumentInput = {
   projectId: number;
   name: string;
   createdBy: string;
-  key: string;
+  // TODO: enforce this to be a key
+  key?: string;
 };
 
 export async function createDocument({
