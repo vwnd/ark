@@ -40,50 +40,54 @@ const pickFile = () => {
 async function upload(files: File[]) {
   pending.value = true;
 
-  if (files.length > 0) {
-    const file = files[0];
-    const extension = file.name.split(".").pop();
+  try {
+    if (files.length > 0) {
+      const file = files[0];
+      const extension = file.name.split(".").pop();
 
-    if (file.size > 100 * 1024 * 1024) throw new Error("File too large");
+      if (file.size > 200 * 1024 * 1024) throw new Error("File too large");
 
-    // 1. get signed url
-    const { data } = await useFetch("/api/documents/upload-url", {
-      query: { projectId: 1, extension },
-    });
+      // 1. get signed url
+      const { data } = await useFetch("/api/documents/upload-url", {
+        query: { projectId: 1, extension },
+      });
 
-    console.log("data", data.value);
+      console.log("data", data.value);
 
-    const uploadUrl = data.value?.url;
-    const key = data.value?.key;
+      const uploadUrl = data.value?.url;
+      const key = data.value?.key;
 
-    console.log("uploadUrl", uploadUrl);
+      console.log("uploadUrl", uploadUrl);
 
-    // 2. upload file to s3
-    const form = new FormData();
-    form.append("file", file);
-    await useFetch(uploadUrl!, {
-      method: "put",
-      body: form,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      // 2. upload file to s3
+      const form = new FormData();
+      form.append("file", file);
+      await useFetch(uploadUrl!, {
+        method: "put",
+        body: form,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    await useFetch("/api/documents/v2", {
-      method: "post",
-      body: {
-        projectId: 1,
-        key,
-        name: file.name,
-      },
-      headers: { "cache-control": "no-cache" },
-    });
+      await useFetch("/api/documents/v2", {
+        method: "post",
+        body: {
+          projectId: 1,
+          key,
+          name: file.name,
+        },
+        headers: { "cache-control": "no-cache" },
+      });
 
-    // await refreshDocuments();
-    await refreshDocuments();
+      // await refreshDocuments();
+      await refreshDocuments();
+    }
+  } catch (error) {
+    alert(error);
+  } finally {
+    pending.value = false;
   }
-
-  pending.value = false;
 }
 
 const handleFileChange = (event: Event) => {
