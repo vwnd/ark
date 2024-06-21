@@ -9,9 +9,6 @@ export async function revitToSpeckle(revitFileObjectKey: string) {
       rvtFile: {
         url: revitFileObjectKey,
         verb: "get",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
       },
     },
   };
