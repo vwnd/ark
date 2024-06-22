@@ -14,8 +14,9 @@
 - [x] Rhino Compute deployment
 - [ ] Add latest version query to documents
 - [ ] Authenticate user with Speckle
-- [ ] Use AWS S3 for Revit job arguments instead of OSS
+- [x] Use AWS S3 for Revit job arguments instead of OSS
 - [ ] Add inputs.json as arguments to Revit job.
 - [x] Geometry from Rhino with materials
 - [ ] Only owner of document can delete it
 - [ ] Wrap other formats (obj, dwg...) with RhinoCompute
+- [x] Handle file uploads on the client side
