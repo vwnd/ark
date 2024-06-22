@@ -45,7 +45,7 @@ async function upload(files: File[]) {
       const file = files[0];
       const extension = file.name.split(".").pop();
 
-      if (file.size > 200 * 1024 * 1024) throw new Error("File too large");
+      if (file.size > 100 * 1024 * 1024) throw new Error("File too large");
 
       // 1. get signed url
       const { data } = await useFetch("/api/documents/upload-url", {
