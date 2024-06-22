@@ -60,13 +60,11 @@ async function upload(files: File[]) {
       console.log("uploadUrl", uploadUrl);
 
       // 2. upload file to s3
-      const form = new FormData();
-      form.append("file", file);
       await useFetch(uploadUrl!, {
         method: "put",
-        body: form,
+        body: file,
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "binary/octet-stream",
         },
       });
 
