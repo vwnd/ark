@@ -53,8 +53,8 @@ namespace Ark.Revit
             Document doc = data.RevitDoc;
             if (doc == null) throw new InvalidOperationException("Could not open document.");
 
-            var supportedCategories = new HashSet<BuiltInCategory> { 
-                BuiltInCategory.OST_StructuralColumns, 
+            var supportedCategories = new HashSet<BuiltInCategory> {
+                BuiltInCategory.OST_StructuralColumns,
                 BuiltInCategory.OST_StructuralFraming,
                 BuiltInCategory.OST_StructuralTruss,
                 BuiltInCategory.OST_StructuralFoundation,
@@ -94,6 +94,7 @@ namespace Ark.Revit
             foreach (var column in columns)
             {
                 Base result = converter.ConvertToSpeckle(column);
+                if (result == null) continue;
                 commitBuilder.IncludeObject(result, column);
             }
 
@@ -179,7 +180,7 @@ namespace Ark.Revit
                     var responseContent = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("Response: " + responseContent);
                     return true;
-                    tx.RollBack();  
+                    tx.RollBack();
                 }
                 else
                 {

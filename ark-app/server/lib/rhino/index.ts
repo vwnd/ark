@@ -57,7 +57,7 @@ export async function rhinoToSpeckle(options: RhinoToSpeckleOptions) {
 
     console.log(response.data);
   } catch (error) {
-    console.log(error);
+    console.log(JSON.stringify(error));
   }
 }
 // const version = "8.0";

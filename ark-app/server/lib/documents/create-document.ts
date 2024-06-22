@@ -6,12 +6,15 @@ type CreateDocumentInput = {
   projectId: number;
   name: string;
   createdBy: string;
+  // TODO: enforce this to be a key
+  key?: string;
 };
 
 export async function createDocument({
   name,
   projectId,
   createdBy,
+  key,
 }: CreateDocumentInput) {
   // Check extension
   const extension = name.slice(name.lastIndexOf(".") + 1);
@@ -46,6 +49,7 @@ export async function createDocument({
         status: "created",
         version,
         createdBy: owner.id,
+        urn: key,
       })
       .returning()
   )[0];

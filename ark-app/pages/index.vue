@@ -40,21 +40,52 @@ const pickFile = () => {
 async function upload(files: File[]) {
   pending.value = true;
 
-  if (files.length > 0) {
-    const file = files[0];
-    const data = new FormData();
-    data.append("file", file);
+  try {
+    if (files.length > 0) {
+      const file = files[0];
+      const extension = file.name.split(".").pop();
 
-    const response = await useFetch("/api/documents", {
-      method: "post",
-      body: data,
-      headers: { "cache-control": "no-cache" },
-    });
+      if (file.size > 200 * 1024 * 1024) throw new Error("File too large");
 
-    refreshDocuments();
+      // 1. get signed url
+      const { data } = await useFetch("/api/documents/upload-url", {
+        query: { projectId: 1, extension },
+      });
+
+      console.log("data", data.value);
+
+      const uploadUrl = data.value?.url;
+      const key = data.value?.key;
+
+      console.log("uploadUrl", uploadUrl);
+
+      // 2. upload file to s3
+      await useFetch(uploadUrl!, {
+        method: "put",
+        body: file,
+        headers: {
+          "Content-Type": "binary/octet-stream",
+        },
+      });
+
+      await useFetch("/api/documents/v2", {
+        method: "post",
+        body: {
+          projectId: 1,
+          key,
+          name: file.name,
+        },
+        headers: { "cache-control": "no-cache" },
+      });
+
+      // await refreshDocuments();
+      await refreshDocuments();
+    }
+  } catch (error) {
+    alert(error);
+  } finally {
+    pending.value = false;
   }
-
-  pending.value = false;
 }
 
 const handleFileChange = (event: Event) => {
