@@ -97,7 +97,11 @@ const handleFileChange = (event: Event) => {
   }
 };
 
-const speckleAuth = false;
+const speckleAuth = ref<string | null>(null);
+
+onMounted(() => {
+  speckleAuth.value = localStorage.getItem("SPECKLE_TOKEN");
+});
 </script>
 
 <template>
@@ -145,7 +149,7 @@ const speckleAuth = false;
     </main>
     <SpeckleConnectPanel
       v-else
-      @token="(token: string) => console.log('token updated', token)"
+      @token="(token: string) => speckleAuth = token"
     />
   </div>
 </template>
