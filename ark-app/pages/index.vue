@@ -143,6 +143,9 @@ const speckleAuth = false;
         ></iframe>
       </div>
     </main>
-    <SpeckleConnectPanel v-else />
+    <SpeckleConnectPanel
+      v-else
+      @token="(token: string) => console.log('token updated', token)"
+    />
   </div>
 </template>

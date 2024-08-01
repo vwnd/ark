@@ -75,7 +75,6 @@ async function exchangeAccessCode(accessCode: string, codeChallenge: string) {
   });
   var data = await res.json();
   if (data.token) {
-    // If retrieving the token was successful, remove challenge and set the new token and refresh token
     localStorage.removeItem(codeChallenge);
     localStorage.setItem("SPECKLE_TOKEN", data.token);
     localStorage.setItem("SPECKLE_REFRESH_TOKEN", data.refreshToken);

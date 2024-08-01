@@ -8,11 +8,14 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(["token"]);
 const appId = useRuntimeConfig().public.speckleAppId;
 const handleSpeckleConnect = () => {
   const codeChallgenge = crypto.randomUUID();
 
   localStorage.setItem("SPECKLE_CODE_CHALLENGE", codeChallgenge);
+  localStorage.removeItem("SPECKLE_TOKEN");
+  localStorage.removeItem("SPECKLE_REFRESH_TOKEN");
 
   const speckleAuthUrl = `https://app.speckle.systems/authn/verify/${appId}/${codeChallgenge}`;
 
@@ -23,6 +26,12 @@ const handleSpeckleConnect = () => {
   const options = `width=${width},height=${height},left=${left},top=${top}`;
 
   window.open(speckleAuthUrl, "Ark Speckle Auth", options);
+  window.addEventListener("storage", () => {
+    const speckleToken = localStorage.getItem("SPECKLE_TOKEN");
+    if (speckleToken) {
+      emit("token", speckleToken);
+    }
+  });
 };
 </script>
 
