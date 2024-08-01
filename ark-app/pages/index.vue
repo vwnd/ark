@@ -106,7 +106,6 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col px-8 py-6 space-y-2 min-h-screen max-w-7xl mx-auto">
-    <AppHeader />
     <main v-if="speckleAuth" class="lg:grid lg:grid-cols-2 gap-8 flex-1">
       <div class="flex flex-col space-y-4">
         <div class="flex h-8 w-full justify-between">
