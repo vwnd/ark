@@ -78,6 +78,8 @@ async function exchangeAccessCode(accessCode: string, codeChallenge: string) {
     localStorage.removeItem(codeChallenge);
     localStorage.setItem("SPECKLE_TOKEN", data.token);
     localStorage.setItem("SPECKLE_REFRESH_TOKEN", data.refreshToken);
+    useCookie("speckle-token").value = data.token;
+    useCookie("speckle-refresh-token", data.refreshToken);
   }
   return data;
 }
