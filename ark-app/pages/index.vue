@@ -96,12 +96,18 @@ const handleFileChange = (event: Event) => {
     fileName.value = "No file selected";
   }
 };
+
+const speckleAuth = ref<string | null>(null);
+
+onMounted(() => {
+  speckleAuth.value = localStorage.getItem("SPECKLE_TOKEN");
+});
 </script>
 
 <template>
   <div class="flex flex-col px-8 py-6 space-y-2 min-h-screen max-w-7xl mx-auto">
     <AppHeader />
-    <main class="lg:grid lg:grid-cols-2 gap-8 flex-1">
+    <main v-if="speckleAuth" class="lg:grid lg:grid-cols-2 gap-8 flex-1">
       <div class="flex flex-col space-y-4">
         <div class="flex h-8 w-full justify-between">
           <BaseSelectMenu class="max-w-60" v-model="project" />
@@ -141,5 +147,9 @@ const handleFileChange = (event: Event) => {
         ></iframe>
       </div>
     </main>
+    <SpeckleConnectPanel
+      v-else
+      @token="(token: string) => speckleAuth = token"
+    />
   </div>
 </template>

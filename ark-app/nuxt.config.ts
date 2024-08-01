@@ -14,4 +14,10 @@ export default defineNuxtConfig({
   colorMode: {
     preference: "light",
   },
+  runtimeConfig: {
+    public: {
+      speckleAppId: "",
+      speckleAppSecret: "",
+    },
+  },
 });
