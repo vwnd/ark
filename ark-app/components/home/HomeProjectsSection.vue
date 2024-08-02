@@ -4,9 +4,9 @@
       <UCard>
         <template #header>
           <div class="flex justify-between">
-            <p class="text-2xl font-medium">Your projects</p>
+            <p class="text-2xl font-medium">Your recent projects</p>
             <div class="space-x-3">
-              <UButton variant="link" to="/projects">Show all</UButton>
+              <UButton variant="link" to="/projects">See all projects</UButton>
               <UButton>Create</UButton>
             </div>
           </div>
@@ -23,3 +23,7 @@
     </UContainer>
   </section>
 </template>
+
+<script setup lang="ts">
+const projects = [];
+</script>
