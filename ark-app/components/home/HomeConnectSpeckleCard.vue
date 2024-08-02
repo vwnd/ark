@@ -4,7 +4,7 @@ import { initSpeckleAuth } from "~/lib/speckle";
 
 <template>
   <HomeWelcomeCard
-    title="Connect to Speckle"
+    title="Connect Speckle"
     description="Link your account"
     @click="initSpeckleAuth"
   >
