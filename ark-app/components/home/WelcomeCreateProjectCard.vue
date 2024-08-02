@@ -12,7 +12,7 @@
         class="h-12 w-12 text-amber-500"
       />
     </div>
-    <CreateProjectModal v-model="isOpen" />
+    <ProjectsCreateModal v-model="isOpen" />
   </HomeWelcomeCard>
 </template>
 

@@ -6,7 +6,7 @@
       <NuxtLink :href="href">
         <div class="space-y-3">
           <slot>
-            <Placeholder class="h-fit aspect-1" />
+            <AppPlaceholder class="h-fit aspect-1" />
           </slot>
           <div class="">
             <p class="text-lg font-medium">{{ title }}</p>

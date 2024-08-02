@@ -21,7 +21,7 @@
         </div>
       </template>
 
-      <Placeholder class="h-32" />
+      <AppPlaceholder class="h-32" />
 
       <template #footer>
         <div class="flex flex-row-reverse gap-4">
