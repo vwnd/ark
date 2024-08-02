@@ -80,6 +80,10 @@ async function exchangeAccessCode(accessCode: string, codeChallenge: string) {
     localStorage.setItem("SPECKLE_REFRESH_TOKEN", data.refreshToken);
     useCookie("speckle-token").value = data.token;
     useCookie("speckle-refresh-token", data.refreshToken);
+    useSpeckleAuth().value = {
+      accessToken: data.token,
+      refreshToken: data.refreshToken,
+    };
   }
   return data;
 }

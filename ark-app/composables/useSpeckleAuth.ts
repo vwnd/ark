@@ -1,5 +1,7 @@
 export const useSpeckleAuth = () =>
-  useState<{ accessToken: string; refreshToken: string }>(
+  useCookie<{ accessToken: string; refreshToken: string } | null>(
     "speckle-auth",
-    undefined
+    {
+      default: () => null,
+    }
   );

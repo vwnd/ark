@@ -5,6 +5,8 @@ const firstName = computed(() => {
   return firstName;
 });
 
+const speckleAuth = useSpeckleAuth();
+
 const recentProjects: {
   id: string;
   title: string;
@@ -55,10 +57,12 @@ const handleCreateProject = () => {
               />
             </div>
           </HomeWelcomeCard>
+          <HomeConnectSpeckleCard v-if="!speckleAuth" />
           <HomeWelcomeCard
             title="Create a project"
-            description="Publish your files to Speckle"
+            description="Start publishing to Speckle"
             @click="handleCreateProject"
+            v-if="speckleAuth"
           >
             <div
               class="h-fit aspect-1 bg-amber-100 rounded border-gray-400 dark:border-gray-500 opacity-75 px-4 flex items-center justify-center"
