@@ -15,8 +15,10 @@
 - [ ] Add latest version query to documents
 - [ ] Authenticate user with Speckle
 - [x] Use AWS S3 for Revit job arguments instead of OSS
-- [ ] Add inputs.json as arguments to Revit job.
+- [x] Add inputs.json as arguments to Revit job.
 - [x] Geometry from Rhino with materials
 - [ ] Only owner of document can delete it
 - [ ] Wrap other formats (obj, dwg...) with RhinoCompute
 - [x] Handle file uploads on the client side
+- [ ] Create "projects" table
+- [ ] Be able to create a project
