@@ -20,7 +20,7 @@ export const migrations = pgTable("migrations", {
 export const projects = pgTable("projects", {
   id: serial("id").primaryKey().notNull(),
   name: text("name").notNull(),
-  speckleId: text("speckle_id").notNull(),
+  speckleId: text("speckle_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
