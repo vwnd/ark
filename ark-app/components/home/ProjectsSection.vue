@@ -1,7 +1,13 @@
 <template>
   <section>
     <UContainer>
-      <UCard>
+      <UCard
+        :ui="{
+          body: {
+            padding: 'px-2 py-2 sm:px-2 sm:py-2',
+          },
+        }"
+      >
         <template #header>
           <div class="flex justify-between">
             <p class="text-2xl font-medium">Your recent projects</p>
@@ -12,12 +18,29 @@
           </div>
         </template>
 
-        <div class="h-72 flex items-center justify-center">
+        <div
+          class="h-72 flex items-center justify-center"
+          v-if="projects.length === 0"
+        >
           <UIcon
             name="i-heroicons-archive-box"
             class="h-6 w-6 text-gray-400 mr-3"
           />
           <p class="text-sm text-gray-400">You currently have no projects.</p>
+        </div>
+
+        <div v-if="projects && projects" class="flex">
+          <div
+            v-for="p in projects"
+            :key="p.id"
+            class="space-y-3 p-2 w-[150px] hover:bg-gray-50 hover:ring-1 hover:ring-primary-300 cursor-pointer rounded-lg"
+          >
+            <AppPlaceholder class="h-[150px]" />
+            <div>
+              <h3 class="font-medium leading-none">{{ p.name }}</h3>
+              <p class="text-xs">Yesterday</p>
+            </div>
+          </div>
         </div>
       </UCard>
     </UContainer>
@@ -25,5 +48,7 @@
 </template>
 
 <script setup lang="ts">
-const projects = [];
+const { data: projects, error } = useFetch("/api/projects", {
+  default: () => [],
+});
 </script>
