@@ -93,16 +93,16 @@ type Schema = z.output<typeof schema>;
 
 const model = defineModel<boolean>();
 
-const resetState = () => {
+function resetState() {
   state.name = undefined;
   state.description = undefined;
   state.access = accessOptions[0];
-};
+}
 
-const onCancelOrLeave = () => {
+function onCancelOrLeave() {
   model.value = false;
   resetState();
-};
+}
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
