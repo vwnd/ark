@@ -22,6 +22,10 @@ export const projects = pgTable("projects", {
   name: text("name").notNull(),
   speckleId: text("speckle_id"),
   createdAt: timestamp("created_at").defaultNow(),
+  createdBy: uuid("created_by")
+    .notNull()
+    .references(() => users.id)
+    .default("69374353-86db-4ca4-bc6c-348c96707b2e"),
 });
 
 export const documents = pgTable("documents", {
