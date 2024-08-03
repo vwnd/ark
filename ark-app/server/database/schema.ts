@@ -24,7 +24,6 @@ export const projects = pgTable("projects", {
   createdAt: timestamp("created_at").defaultNow(),
   createdBy: uuid("created_by")
     .notNull()
-    .references(() => users.id)
     .default("69374353-86db-4ca4-bc6c-348c96707b2e"),
 });
 
@@ -79,8 +78,12 @@ export const documentsRelations = relations(documents, ({ one, many }) => ({
   deliverables: many(deliverables),
 }));
 
-export const projectsRelations = relations(projects, ({ many }) => ({
+export const projectsRelations = relations(projects, ({ many, one }) => ({
   documents: many(documents),
+  createdBy: one(users, {
+    fields: [projects.createdBy],
+    references: [users.id],
+  }),
 }));
 
 export const usersRelations = relations(users, ({ many }) => ({
