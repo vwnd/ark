@@ -74,12 +74,11 @@ async function exchangeAccessCode(accessCode: string, codeChallenge: string) {
     body,
   });
   var data = await res.json();
+  console.log("hello", JSON.stringify(data));
   if (data.token) {
     localStorage.removeItem(codeChallenge);
     localStorage.setItem("SPECKLE_TOKEN", data.token);
     localStorage.setItem("SPECKLE_REFRESH_TOKEN", data.refreshToken);
-    useCookie("speckle-token").value = data.token;
-    useCookie("speckle-refresh-token", data.refreshToken);
     useSpeckleAuth().value = {
       accessToken: data.token,
       refreshToken: data.refreshToken,

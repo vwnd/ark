@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import UserDropdown from "../users/Dropdown.vue";
+</script>
+
 <template>
   <div class="border-b">
     <header
@@ -9,7 +13,7 @@
         </NuxtLink>
         <UBadge color="primary" variant="outline" class="ml-4" label="Beta" />
       </span>
-      <UserDropdown />
+      <UsersDropdown />
     </header>
   </div>
 </template>
