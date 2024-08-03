@@ -1,6 +1,6 @@
 <template>
   <UModal v-model="model" @after-leave="onCancelOrLeave">
-    <UForm :state="state" :schema="schema" @submit="onSubmit">
+    <UForm ref="form" :state="state" :schema="schema" @submit="onSubmit">
       <UCard>
         <template #header>
           <div class="flex items-start justify-between">
@@ -45,6 +45,7 @@
               :options="accessOptions"
               by="id"
               option-attribute="label"
+              value-attribute="value"
             />
           </UFormGroup>
         </div>
@@ -60,33 +61,39 @@
 </template>
 
 <script setup lang="ts">
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 
 const accessOptions = [
   {
     id: 0,
+    value: "private",
     label: "Private",
   },
   {
     id: 1,
+    value: "link-shareable",
     label: "Link Shareable",
   },
   {
     id: 2,
+    value: "discoverable",
     label: "Discoverable",
   },
 ];
 
+const form = ref();
+
 const schema = z.object({
   name: z.string(),
   description: z.string().optional(),
+  access: z.enum(["private", "link-shareable", "discoverable"]),
 });
 
 const state = reactive({
   name: undefined,
   description: undefined,
-  access: accessOptions[0],
+  access: accessOptions[0].value,
 });
 
 type Schema = z.output<typeof schema>;
@@ -96,7 +103,7 @@ const model = defineModel<boolean>();
 function resetState() {
   state.name = undefined;
   state.description = undefined;
-  state.access = accessOptions[0];
+  state.access = accessOptions[0].value;
 }
 
 function onCancelOrLeave() {
@@ -105,9 +112,10 @@ function onCancelOrLeave() {
 }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with event.data
-  console.log(event.data);
-  model.value = false;
-  resetState();
+  const response = await $fetch("/api/projects", {
+    method: "POST",
+    body: JSON.stringify(event.data),
+  });
+  onCancelOrLeave();
 }
 </script>
