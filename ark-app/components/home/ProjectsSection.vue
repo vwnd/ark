@@ -12,7 +12,9 @@
           <div class="flex justify-between">
             <p class="text-2xl font-medium">Your recent projects</p>
             <div class="space-x-3">
-              <UButton variant="link" to="/projects">See all projects</UButton>
+              <UButton variant="link" to="/projects" v-if="false"
+                >See all projects</UButton
+              >
               <UButton
                 @click="isCreateProjectModalOpen = true"
                 v-if="speckleAuth"

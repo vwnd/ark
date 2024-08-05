@@ -27,6 +27,10 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 
+definePageMeta({
+  layout: "no-header",
+});
+
 const isLoading = ref(true);
 const error = ref(false);
 const message = ref("Finishing your connection...");
