@@ -1,5 +1,6 @@
 import { db } from "~/server/database/drizzle";
 import { projects } from "~/server/database/schema";
+import { createProject as createSpeckleProject } from "~/server/lib/speckle";
 
 type CreateProjectInput = typeof projects.$inferInsert & {
   speckleAuth?: {
@@ -10,8 +11,10 @@ type CreateProjectInput = typeof projects.$inferInsert & {
 
 export async function createProject(data: CreateProjectInput) {
   if (data.speckleAuth) {
-    console.log("Creating speckle project...");
-    const speckleProjectId = "speckle-project-id";
+    const { accessToken } = data.speckleAuth;
+    const speckleProjectId = await createSpeckleProject({
+      accessToken,
+    });
     data.speckleId = speckleProjectId;
   }
 
