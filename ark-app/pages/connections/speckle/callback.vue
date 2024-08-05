@@ -44,7 +44,7 @@ const { execute } = useAsyncData(async () => {
     const data = await exchangeAccessCode(accessCode, codeChallenge);
     if (data.token) {
       message.value =
-        "You have successfully connected to Speckle! You can close this window now.";
+        "You have successfully connected to Speckle!\nYou can close this window now.";
       error.value = false;
     } else {
       message.value = "There was an error connecting to Speckle.";

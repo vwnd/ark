@@ -24,7 +24,7 @@
 
         <div class="space-y-4">
           <UFormGroup label="Name" name="name" required size="lg">
-            <UInput v-model="state.name" />
+            <UInput v-model="state.name" :autofocus="true" />
           </UFormGroup>
           <UFormGroup
             label="Description"
