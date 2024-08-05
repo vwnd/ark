@@ -37,12 +37,17 @@ export default defineEventHandler(async (event) => {
 
   try {
     const data = await useValidatedBody(event, schema);
-    await createProject({ ...data, speckleAuth, createdBy: session.uid });
+    await createProject({
+      ...data,
+      speckle: { ...speckleAuth },
+      createdBy: session.uid,
+    });
     return {
       message: "Project created successfully.",
       error: null,
     };
   } catch (error) {
+    console.error("Failed to create project", error);
     throw createError({
       statusCode: 500,
       message: "Failed to create project.",
