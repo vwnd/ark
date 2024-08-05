@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 const { data: projects, error } = useFetch("/api/projects", {
+  key: "projects",
   default: () => [],
 });
 </script>

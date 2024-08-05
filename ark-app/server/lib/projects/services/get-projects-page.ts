@@ -5,7 +5,7 @@ import { projects } from "~/server/database/schema";
 export async function getProjectsPage(
   ownerId: string,
   cursor?: number,
-  pageSize = 3
+  pageSize = 5
 ) {
   const projectsPage = await db
     .select()
