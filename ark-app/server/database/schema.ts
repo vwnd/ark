@@ -21,7 +21,8 @@ export const projects = pgTable("projects", {
   id: serial("id").primaryKey().notNull(),
   name: text("name").notNull(),
   speckleId: text("speckle_id"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
   createdBy: uuid("created_by").notNull(),
 });
 

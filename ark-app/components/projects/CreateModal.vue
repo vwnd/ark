@@ -43,7 +43,6 @@
             <USelectMenu
               v-model="state.access"
               :options="accessOptions"
-              by="id"
               option-attribute="label"
               value-attribute="value"
             />

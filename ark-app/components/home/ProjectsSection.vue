@@ -38,7 +38,7 @@
             <AppPlaceholder class="h-[150px]" />
             <div>
               <h3 class="font-medium leading-none">{{ p.name }}</h3>
-              <p class="text-xs">Yesterday</p>
+              <p class="text-xs">{{ lastActivity(p) }}</p>
             </div>
           </div>
         </div>
@@ -48,8 +48,14 @@
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
+
 const { data: projects, error } = useFetch("/api/projects", {
   key: "projects",
   default: () => [],
 });
+
+const lastActivity = (p: { createdAt: string }) => {
+  return moment(p.createdAt).fromNow();
+};
 </script>
