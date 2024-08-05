@@ -13,7 +13,11 @@
             <p class="text-2xl font-medium">Your recent projects</p>
             <div class="space-x-3">
               <UButton variant="link" to="/projects">See all projects</UButton>
-              <UButton @click="isCreateProjectModalOpen = true">Create</UButton>
+              <UButton
+                @click="isCreateProjectModalOpen = true"
+                v-if="speckleAuth"
+                >Create</UButton
+              >
             </div>
           </div>
         </template>
@@ -56,6 +60,7 @@ const { data: projects, error } = useFetch("/api/projects", {
   default: () => [],
 });
 
+const speckleAuth = useSpeckleAuth();
 const isCreateProjectModalOpen = ref(false);
 
 const lastActivity = (p: { createdAt: string }) => {

@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   if (!cookie) {
     throw createError({
       statusCode: 401,
-      message: "Missing Speckle Auth cookie.",
+      message: "Missing Speckle authentication credentials.",
     });
   }
 
