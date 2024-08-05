@@ -64,6 +64,8 @@
 import { z, ZodError } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 
+const toast = useToast();
+
 const accessOptions = [
   {
     id: 0,
@@ -112,10 +114,22 @@ function onCancelOrLeave() {
 }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const response = await $fetch("/api/projects", {
-    method: "POST",
-    body: JSON.stringify(event.data),
-  });
+  try {
+    const response = await $fetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify(event.data),
+    });
+  } catch (error: any) {
+    let message = "An error occurred while creating the project.";
+    if (error.data.message) {
+      message = error.data.message;
+    }
+    toast.add({
+      title: "Something bad happened",
+      description: message,
+      timeout: 5000,
+    });
+  }
   refreshNuxtData("projects");
   onCancelOrLeave();
 }
