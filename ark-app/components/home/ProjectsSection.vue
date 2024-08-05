@@ -13,7 +13,7 @@
             <p class="text-2xl font-medium">Your recent projects</p>
             <div class="space-x-3">
               <UButton variant="link" to="/projects">See all projects</UButton>
-              <UButton>Create</UButton>
+              <UButton @click="isCreateProjectModalOpen = true">Create</UButton>
             </div>
           </div>
         </template>
@@ -44,6 +44,7 @@
         </div>
       </UCard>
     </UContainer>
+    <ProjectsCreateModal v-model="isCreateProjectModalOpen" />
   </section>
 </template>
 
@@ -54,6 +55,8 @@ const { data: projects, error } = useFetch("/api/projects", {
   key: "projects",
   default: () => [],
 });
+
+const isCreateProjectModalOpen = ref(false);
 
 const lastActivity = (p: { createdAt: string }) => {
   return moment(p.createdAt).fromNow();

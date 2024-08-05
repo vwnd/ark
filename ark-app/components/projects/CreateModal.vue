@@ -17,6 +17,7 @@
               color="gray"
               variant="link"
               icon="i-heroicons-x-mark-20-solid"
+              type="reset"
               @click="model = false"
             />
           </div>
@@ -60,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { z, ZodError } from "zod";
+import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 
 const toast = useToast();
