@@ -3,5 +3,6 @@ export const useSpeckleAuth = () =>
     "speckle-auth",
     {
       default: () => null,
+      maxAge: 60 * 60 * 24 * 30,
     }
   );
