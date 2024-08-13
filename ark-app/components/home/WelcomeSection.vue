@@ -33,22 +33,5 @@ const recentProjects: {
   title: string;
   description: string;
   href?: string;
-}[] = [
-  // {
-  //   id: 2,
-  //   title: "Recent Project 1",
-  //   description: "Recently published by Victor.",
-  //   href: "/playground",
-  // },
-  // {
-  //   id: 3,
-  //   title: "Recent Project 2",
-  //   description: "Recently published by Maria.",
-  //   href: "/playground",
-  // },
-];
-
-const handleCreateProject = () => {
-  console.log("Create project");
-};
+}[] = [];
 </script>

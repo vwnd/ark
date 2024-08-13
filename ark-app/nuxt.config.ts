@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/ui", "@sidebase/nuxt-auth"],
+
   auth: {
     provider: {
       type: "authjs",
@@ -11,13 +12,17 @@ export default defineNuxtConfig({
     },
     baseURL: process.env.AUTH_ORIGIN + "/api/auth",
   },
+
   colorMode: {
     preference: "light",
   },
+
   runtimeConfig: {
     public: {
       speckleAppId: "",
       speckleAppSecret: "",
     },
+
+    compatibilityDate: "2024-08-13",
   },
 });
