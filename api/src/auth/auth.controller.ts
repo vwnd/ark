@@ -1,4 +1,5 @@
 import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
@@ -8,7 +9,15 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  private readonly successRedirectURL: string;
+  constructor(
+    private readonly authService: AuthService,
+    private configService: ConfigService,
+  ) {
+    this.successRedirectURL = this.configService.getOrThrow<string>(
+      'OAUTH_SUCCESS_REDIRECT_URL',
+    );
+  }
 
   @Get('signin/google')
   @UseGuards(GoogleAuthGuard)
@@ -20,7 +29,8 @@ export class AuthController {
     @CurrentUser() user: RequestUser,
     @Res({ passthrough: true }) response: Response,
   ) {
-    await this.authService.authenticate(user, response, true);
+    await this.authService.authenticate(user, response);
+    return response.redirect(this.successRedirectURL);
   }
 
   @Get('signin/github')
@@ -33,6 +43,7 @@ export class AuthController {
     @CurrentUser() user: RequestUser,
     @Res({ passthrough: true }) response: Response,
   ) {
-    await this.authService.authenticate(user, response, true);
+    await this.authService.authenticate(user, response);
+    return response.redirect(this.successRedirectURL);
   }
 }

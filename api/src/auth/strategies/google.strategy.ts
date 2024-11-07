@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import * as crypto from 'crypto';
-import { Strategy } from 'passport-google-oauth20';
+import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { RequestUser } from '../dto/user.type';
 import { GoogleProfile } from '../interfaces/google-profile.interface';
 
@@ -25,6 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: GoogleProfile,
+    done: VerifyCallback,
   ): Promise<RequestUser> {
     try {
       const email = profile.emails[0].value;
@@ -44,9 +45,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 
         const user = await this.usersService.getUserById(newUser.id);
 
-        return {
-          ...user,
-        };
+        done(null, user);
       }
 
       throw error;

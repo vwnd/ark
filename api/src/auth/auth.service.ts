@@ -17,16 +17,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(
-    input: LoginInput,
-    response: Response,
-    redirect = false,
-  ): Promise<LoginOutput> {
+  async login(input: LoginInput, response: Response): Promise<LoginOutput> {
     const { email, password } = input;
 
     const user = await this.verifyAndGetUser(email, password);
 
-    const { accessToken } = await this.authenticate(user, response, redirect);
+    const { accessToken } = await this.authenticate(user, response);
 
     return {
       token: accessToken,
@@ -39,7 +35,6 @@ export class AuthService {
   async authenticate(
     user: RequestUser,
     response: Response,
-    redirect: boolean = false,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const expiresAccessToken = new Date();
     expiresAccessToken.setMilliseconds(
@@ -65,10 +60,6 @@ export class AuthService {
       secure: this.configService.get('NODE_ENV') === 'production',
       expires: expiresAccessToken,
     });
-
-    if (redirect) {
-      response.redirect('http://localhost:3000/graphql'); // TODO: change for environment variable
-    }
 
     return {
       accessToken,

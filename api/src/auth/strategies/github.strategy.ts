@@ -24,6 +24,7 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: any,
+    done: (error: unknown, user: RequestUser) => void,
   ): Promise<RequestUser> {
     try {
       const email = profile.emails[0].value;
@@ -42,10 +43,7 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
         });
 
         const user = await this.usersService.getUserById(newUser.id);
-
-        return {
-          ...user,
-        };
+        done(null, user);
       }
 
       throw error;
