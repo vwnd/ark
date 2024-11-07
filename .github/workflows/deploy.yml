@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to Mau
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ./api
+
+      - name: Setup Environment (PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          echo "GIT_HASH=${{ github.event.pull_request.head.sha }}" >>${GITHUB_ENV}
+      - name: Setup Environment (Push)
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        run: |
+          echo "GIT_HASH=${GITHUB_SHA}" >> ${GITHUB_ENV}
+      - name: Push and deploy
+        run: npx @nestjs/mau deploy --wait-for-service-stability
+        working-directory: ./api
+        env:
+          MAU_KEY: ${{ secrets.MAU_KEY }}
+          MAU_SECRET: ${{ secrets.MAU_SECRET }}
