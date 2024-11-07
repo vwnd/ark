@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "@"
+		},
+		{
+			"path": "api",
+			"name": "🔌 api"
+		},
+		{
+			"path": "ark-app",
+			"name": "🚀 app"
+		},
+		{
+			"path": "Ark.Revit",
+			"name": "🟦 revit"
+		},
+		{
+			"path": "Ark.Rhino",
+			"name": "🦏 rhino"
+		}
+	],
+	"settings": {}
+}
