@@ -5,6 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,12 +13,13 @@
 		<PackageReference Include="RevitSharedResources2025" Version="2.20.5" />
 		<PackageReference Include="Speckle.Objects.Converter.Revit2025" Version="2.20.5" />
 		<PackageReference Include="Speckle.Core" Version="2.20.5" />
+		<PackageReference Include="Autodesk.Revit.SDK" Version="2025.0.2.419" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="RevitAPI">
+	  <!-- <Reference Include="RevitAPI">
 	    <HintPath>..\..\..\Program Files\Autodesk\Revit 2025\RevitAPI.dll</HintPath>
-	  </Reference>
+	  </Reference> -->
 	</ItemGroup>
 
 	<ItemGroup>
