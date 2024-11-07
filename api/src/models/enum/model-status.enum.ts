@@ -1,0 +1,6 @@
+export enum ModelStatus {
+  UNPUBLISHED = 'UNPUBLISHED',
+  PUBLISHED = 'PUBLISHED',
+  PENDING = 'PENDING',
+  FAILED = 'FAILED',
+}
