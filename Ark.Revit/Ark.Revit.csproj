@@ -1,21 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Autodesk.Forge.DesignAutomation.Revit" Version="2023.0.2" />
-		<PackageReference Include="RevitSharedResources2023" Version="2.19.2" />
-		<PackageReference Include="Speckle.Objects.Converter.Revit2023" Version="2.19.2" />
+		<PackageReference Include="Autodesk.Forge.DesignAutomation.Revit" Version="2025.0.1" />
+		<PackageReference Include="RevitSharedResources2025" Version="2.20.5" />
+		<PackageReference Include="Speckle.Objects.Converter.Revit2025" Version="2.20.5" />
+		<PackageReference Include="Speckle.Core" Version="2.20.5" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Reference Include="RevitAPI">
-	    <HintPath>..\..\..\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
+	    <HintPath>..\..\..\Program Files\Autodesk\Revit 2025\RevitAPI.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

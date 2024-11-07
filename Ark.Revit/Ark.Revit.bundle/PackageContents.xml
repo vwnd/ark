@@ -6,7 +6,7 @@
 >
 	<CompanyDetails Name="Ark" Url="http://ark.dev" Email="ark@mail.com"/>
 	<Components Description="Sends to Speckle">
-		<RuntimeRequirements SeriesMax="R2023" SeriesMin="R2023" Platform="Revit" OS="Win64"/>
+		<RuntimeRequirements SeriesMax="R2025" SeriesMin="R2025" Platform="Revit" OS="Win64"/>
 		<ComponentEntry
 			LoadOnRevitStartup="True"
 			LoadOnCommandInvocation="False"

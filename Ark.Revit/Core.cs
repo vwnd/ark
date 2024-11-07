@@ -5,12 +5,12 @@ using DesignAutomationFramework;
 using Objects.BuiltElements;
 using Objects.Converter.Revit;
 using Speckle.Core.Api;
+using Speckle.Core.Api.GraphQL.Models;
 using Speckle.Core.Credentials;
 using Speckle.Core.Helpers;
 using Speckle.Core.Logging;
 using Speckle.Core.Models;
 using Speckle.Core.Transports;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace Ark.Revit
@@ -179,18 +179,17 @@ namespace Ark.Revit
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("Response: " + responseContent);
-                    return true;
                     tx.RollBack();
+                    return true;
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("Error: " + response.StatusCode + " " + errorContent);
-                    return false;
                     tx.RollBack();
+                    return false;
                 }
             }
-            return true;
         }
 
         private static async void SendToSpeckle(Base rootCommitObject, string blobStorageFolder = null)
@@ -217,7 +216,7 @@ namespace Ark.Revit
             Console.WriteLine($"Sent commit object to Speckle with ID {objectId}.");
             Console.WriteLine("SendToSpeckle finished");
 
-            await client.CommitCreate(new CommitCreateInput()
+            await client.Version.Create(new CommitCreateInput()
             {
                 streamId = projectId,
                 objectId = objectId,
@@ -226,23 +225,9 @@ namespace Ark.Revit
                 sourceApplication = "Ark.Revit",
                 totalChildrenCount = (int)rootCommitObject.GetTotalChildrenCount()
             });
+
             Console.WriteLine($"Created commit in Speckle with ID {objectId}.");
             Console.WriteLine($"SendToSpeckle took {DateTime.Now - startSendTime}ms.");
-        }
-
-        private static Base MockObjects()
-        {
-            var data = new Base();
-            var elements = new List<Base>();
-            for (int i = 0; i < 10; i++)
-            {
-                var baseLine = new Objects.Geometry.Line(new Objects.Geometry.Point(i, 0, 0), new Objects.Geometry.Point(i, 0, 3));
-                var column = new Column(baseLine);
-                elements.Add(column);
-            }
-
-            data["elements"] = elements;
-            return data;
         }
     }
 }
