@@ -3,9 +3,9 @@ import { RequestUser } from '@/auth/dto/user.type';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateModelInput } from './dto/create-model.input';
-import { CreateModelOutput } from './dto/create-model.output';
-import { ModelsService } from './services/models.service';
+import { ModelsService } from '../core/models.service';
+import { CreateModelInput } from './type/create-model.input';
+import { CreateModelOutput } from './type/create-model.output';
 
 @Resolver()
 export class ModelsResolver {

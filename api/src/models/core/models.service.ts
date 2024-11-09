@@ -14,11 +14,11 @@ import {
 import { randomBytes } from 'crypto';
 import { and, eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { CreateModelInput } from '../dto/create-model.input';
-import { CreateModelOutput } from '../dto/create-model.output';
-import { ModelStatus } from '../enum/model-status.enum';
-import { ModelType } from '../enum/model-type.enum';
-import * as schema from '../schema/models.schema';
+import { CreateModelInput } from '../graphql/type/create-model.input';
+import { CreateModelOutput } from '../graphql/type/create-model.output';
+import { ModelStatus } from '../graphql/type/model-status.enum';
+import { ModelType } from '../graphql/type/model-type.enum';
+import * as schema from '../persistence/models.schema';
 
 @Injectable()
 export class ModelsService {

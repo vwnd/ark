@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { ModelType } from '../enum/model-type.enum';
+import { ModelType } from './model-type.enum';
 
 @InputType()
 export class CreateModelInput {

@@ -2,8 +2,8 @@ import { ApsModule } from '@/aps/aps.module';
 import { ProjectsModule } from '@/projects/projects.module';
 import { StorageModule } from '@/storage/storage.module';
 import { forwardRef, Module } from '@nestjs/common';
-import { ModelsResolver } from './models.resolver';
-import { ModelsService } from './services/models.service';
+import { ModelsService } from './core/models.service';
+import { ModelsResolver } from './graphql/models.resolver';
 
 @Module({
   imports: [ProjectsModule, StorageModule, forwardRef(() => ApsModule)],

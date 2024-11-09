@@ -4,8 +4,8 @@ import { projects } from '@/projects/projects.schema';
 import { users } from '@/users/schema/users.schema';
 import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, varchar } from 'drizzle-orm/pg-core';
-import { ModelStatus } from '../enum/model-status.enum';
-import { ModelType } from '../enum/model-type.enum';
+import { ModelStatus } from '../graphql/type/model-status.enum';
+import { ModelType } from '../graphql/type/model-type.enum';
 
 export const modelTypeEnum = pgEnum('model_type', enumToPgEnum(ModelType));
 export const modelStatusEnum = pgEnum(

@@ -1,8 +1,8 @@
-import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { baseColumns } from '@/database/drizzle/base-columns';
-import { relations } from 'drizzle-orm';
+import { models } from '@/models/persistence/models.schema';
 import { users } from '@/users/schema/users.schema';
-import { models } from '@/models/schema/models.schema';
+import { relations } from 'drizzle-orm';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 // Projects
 

@@ -1,5 +1,5 @@
-import { ModelStatus } from '@/models/enum/model-status.enum';
-import { ModelsService } from '@/models/services/models.service';
+import { ModelsService } from '@/models/core/models.service';
+import { ModelStatus } from '@/models/graphql/type/model-status.enum';
 import {
   OnQueueEvent,
   QueueEventsHost,
