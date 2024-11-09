@@ -6,7 +6,11 @@ import { ModelsService } from './core/models.service';
 import { ModelsResolver } from './graphql/models.resolver';
 
 @Module({
-  imports: [ProjectsModule, StorageModule, forwardRef(() => ApsModule)],
+  imports: [
+    forwardRef(() => ProjectsModule),
+    StorageModule,
+    forwardRef(() => ApsModule),
+  ],
   providers: [ModelsService, ModelsResolver],
   exports: [ModelsService],
 })

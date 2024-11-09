@@ -1,15 +1,15 @@
-import { Module } from '@nestjs/common';
-import { ProjectsModule } from '@/projects/projects.module';
-import { GraphQLModule } from '@/graphql/graphql.module';
 import { DatabaseModule } from '@/database/database.module';
+import { GraphQLModule } from '@/graphql/graphql.module';
+import { ProjectsModule } from '@/projects/projects.module';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
+import { ApsModule } from './aps/aps.module';
 import { AuthModule } from './auth/auth.module';
+import { JobsModule } from './jobs/jobs.module';
 import { ModelsModule } from './models/models.module';
 import { StorageModule } from './storage/storage.module';
-import { ApsModule } from './aps/aps.module';
-import { JobsModule } from './jobs/jobs.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [

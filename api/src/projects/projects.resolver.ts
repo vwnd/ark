@@ -1,17 +1,29 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateProjectInput } from './dto/create-project.input';
-import { CreateProjectOutput } from './dto/create-project.output';
-import { Project } from './dto/project.type';
-import { ProjectsService } from './projects.service';
-import { DeleteProjectInput } from './dto/delete-project.input';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import { RequestUser } from '@/auth/dto/user.type';
-import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { ModelsService } from '@/models/core/models.service';
+import { ModelCollection } from '@/models/graphql/model-collection.type';
+import { UseGuards } from '@nestjs/common';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
+import { CreateProjectInput } from './dto/create-project.input';
+import { CreateProjectOutput } from './dto/create-project.output';
+import { DeleteProjectInput } from './dto/delete-project.input';
+import { Project } from './dto/project.type';
+import { ProjectsService } from './projects.service';
 
-@Resolver()
+@Resolver(() => Project)
 export class ProjectsResolver {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(
+    private readonly projectsService: ProjectsService,
+    private readonly modelsService: ModelsService,
+  ) {}
 
   @Query(() => Project)
   @UseGuards(JwtAuthGuard)
@@ -44,5 +56,11 @@ export class ProjectsResolver {
     @CurrentUser() user: RequestUser,
   ): Promise<boolean> {
     return this.projectsService.delete(input.id, user.id);
+  }
+
+  @ResolveField(() => ModelCollection)
+  @UseGuards(JwtAuthGuard)
+  async models(@Parent() project: Project): Promise<ModelCollection> {
+    return this.modelsService.getProjectModels(project.id);
   }
 }

@@ -1,14 +1,19 @@
-export abstract class Collection<T> {
-  cursor: string;
+import { Type } from '@nestjs/common';
+import { Field, ObjectType } from '@nestjs/graphql';
+
+export interface Collection<T> {
+  cursor: string | null;
   items: T[];
 }
 
-export class Model {
-  id: string;
-  name: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export function CollectionType<T>(classRef: Type<T>): Type<Collection<T>> {
+  @ObjectType({ isAbstract: true })
+  abstract class CollectionType implements Collection<T> {
+    @Field(() => String, { nullable: true })
+    cursor: string;
 
-export class ModelCollection extends Collection<Model> {}
+    @Field(() => [classRef])
+    items: T[];
+  }
+  return CollectionType as Type<Collection<T>>;
+}

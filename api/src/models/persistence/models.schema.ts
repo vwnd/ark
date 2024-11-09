@@ -17,8 +17,8 @@ export const models = pgTable('models', {
   name: varchar('name', { length: 255 }).notNull(),
   createdBy: varchar('created_by').notNull(),
   projectId: varchar('project_id').notNull(),
-  modelType: modelTypeEnum('model_type').notNull(),
-  modelStatus: modelStatusEnum('model_status').default(ModelStatus.UNPUBLISHED),
+  type: modelTypeEnum('type').notNull(),
+  status: modelStatusEnum('status').default(ModelStatus.CREATED).notNull(),
   fileStorageKey: varchar('file_storage_key'),
   ...baseColumns,
 });

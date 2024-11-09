@@ -12,8 +12,10 @@ import {
   NotImplementedException,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
+import generateCursor from 'drizzle-cursor';
 import { and, eq } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { ModelCollection } from '../graphql/model-collection.type';
 import { CreateModelInput } from '../graphql/type/create-model.input';
 import { CreateModelOutput } from '../graphql/type/create-model.output';
 import { ModelStatus } from '../graphql/type/model-status.enum';
@@ -49,8 +51,8 @@ export class ModelsService {
         name,
         projectId,
         createdBy: userId,
-        modelType,
-        modelStatus: ModelStatus.UNPUBLISHED,
+        type: modelType,
+        status: ModelStatus.UNPUBLISHED,
       })
       .returning();
 
@@ -63,7 +65,7 @@ export class ModelsService {
         createdBy: schema.models.createdBy,
         id: schema.models.id,
         fileStorageKey: schema.models.fileStorageKey,
-        modelType: schema.models.modelType,
+        type: schema.models.type,
       })
       .from(schema.models)
       .where(
@@ -92,7 +94,7 @@ export class ModelsService {
     }
 
     let fileExtension: string;
-    switch (model.modelType) {
+    switch (model.type) {
       case ModelType.REVIT:
         fileExtension = 'rvt';
         break;
@@ -123,7 +125,7 @@ export class ModelsService {
         createdBy: schema.models.createdBy,
         id: schema.models.id,
         fileStorageKey: schema.models.fileStorageKey,
-        modelType: schema.models.modelType,
+        modelType: schema.models.type,
       })
       .from(schema.models)
       .where(
@@ -169,7 +171,7 @@ export class ModelsService {
 
     await this.db
       .update(schema.models)
-      .set({ modelStatus: ModelStatus.PENDING, updatedAt: new Date() })
+      .set({ status: ModelStatus.PENDING, updatedAt: new Date() })
       .where(eq(schema.models.id, modelId));
 
     return true;
@@ -179,11 +181,31 @@ export class ModelsService {
     try {
       await this.db
         .update(schema.models)
-        .set({ modelStatus: status, updatedAt: new Date() })
+        .set({ status, updatedAt: new Date() })
         .where(eq(schema.models.id, modelId));
     } catch (error) {
       this.logger.error('Failed to update model status.', error);
       throw new InternalServerErrorException('Failed to update model status.');
     }
+  }
+
+  async getProjectModels(projectId: string): Promise<ModelCollection> {
+    const cursor = generateCursor({
+      primaryCursor: {
+        key: 'id',
+        schema: schema.models.id,
+      },
+    });
+
+    const models = await this.db
+      .select()
+      .from(schema.models)
+      .where(and(cursor.where(), eq(schema.models.projectId, projectId)))
+      .limit(20);
+
+    return {
+      cursor: cursor.serialize(models.at(-1)),
+      items: models,
+    };
   }
 }
