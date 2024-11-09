@@ -7,4 +7,5 @@
 - [x] Get Model File Upload URL
 - [x] Publish model to speckle mutation
 - [x] Add model status.
-- [ ] Add OAuth (Google and Github).
+- [x] Add OAuth (Google and Github).
+- [ ] Query models.
