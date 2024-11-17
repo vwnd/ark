@@ -19,6 +19,9 @@
 		{
 			"path": "Ark.Rhino",
 			"name": "🦏 rhino"
+		},
+		{
+			"path": "apps/ark"
 		}
 	],
 	"settings": {}
