@@ -28,7 +28,11 @@ export async function currentUser(): Promise<UserInfo | undefined> {
     body: JSON.stringify({ query }),
   });
 
-  const { data } = await response.json();
+  const { data, errors } = await response.json();
+
+  if (errors) {
+    return undefined;
+  }
 
   const userInfo = data.userInfo as UserInfo;
 
