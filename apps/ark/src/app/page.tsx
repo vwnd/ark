@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { currentUser } from "./auth/current-user";
+import LogoutButton from "@/components/logout-button";
 
 export default async function Home() {
   const user = await currentUser();
@@ -15,7 +16,10 @@ export default async function Home() {
             <a>Login</a>
           </Link>
         ) : (
-          <p>Welcome, {user.name.split(" ")[0]}</p>
+          <>
+            <p>Welcome, {user.name.split(" ")[0]}</p>
+            <LogoutButton />
+          </>
         )}
       </header>
       <main className="flex flex-col items-center">
